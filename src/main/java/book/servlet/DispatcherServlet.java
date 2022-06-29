@@ -46,7 +46,7 @@ public class DispatcherServlet extends ViewBaseServlet {
 
         String operate = request.getParameter("operate");
         if (operate == null || "".equals(operate)) {
-            super.processTemplate("user/login", request, response);
+            super.processTemplate("index", request, response);
             return;
         }
 

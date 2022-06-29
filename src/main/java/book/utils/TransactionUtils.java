@@ -12,7 +12,7 @@ import java.io.InputStream;
 /**
  * @author: Ding
  * @date: 2022/6/29
- * @description:
+ * @description: 事务控制工具类
  * @modify:
  */
 
