@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 核心配置文件中 标签的顺序
+        properties?,
+        settings?,
+        typeAliases?,
+        typeHandlers?,
+        objectFactory?,
+        objectWrapperFactory?,
+        reflectorFactory?,
+        plugins?,
+        environments?,
+        databaseIdProvider?,
+        mappers?
+    -->
+
+    <!--引入 jdbc 连接信息 的配置文件-->
+    <properties resource="mysql-config.properties"/>
+
+    <!--设置 mybatis 的全局配置 详见：https://mybatis.org/mybatis-3/zh/configuration.html#settings-->
+    <settings>
+        <!--开启驼峰命名自动映射，即从经典数据库列名 A_COLUMN 映射到经典 Java 属性名 aColumn-->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
+    <!--类型别名 : 给mapper接口映射到的xml文件的 resultType 属性起别名，默认别名是类名，且不区分大小写-->
+    <typeAliases>
+        <package name=""/>
+    </typeAliases>
+
+    <!--    配置自定义类型转换器-->
+    <typeHandlers>
+        <!--<typeHandler handler=""/>-->
+        <!--<package name=""/>-->
+    </typeHandlers>
+
+
+    <!--配置多个数据库的连接环境信息，可以配置多个 environment ，通过 default 属性切换不同的 environment-->
+    <environments default="environment">
+        <!--数据库相关 配置-->
+        <!--表示连接数据库环境的唯一标识，不能重复-->
+        <environment id="environment">
+            <!--
+                事务管理方式
+                    type : JDBC | MANAGED
+                    JDBC : 表示当前环境中执行 SQL 时，使用的是 JDBC 原生的事务管理方式，事物的提交回滚需要手动处理
+                    MANAGED : 表示被管理 例如 Spring
+            -->
+            <transactionManager type="JDBC"/>
+            <!--
+                设置数据源的类型
+                    type :
+                        POOLED : 表示使用数据库连接池缓存数据库连接
+                        UNPOOLED : 表示不使用数据库连接池
+                        JNDI : 使用上下文中的数据源
+            -->
+            <dataSource type="POOLED">
+                <!--数据库连接信息-->
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!--加载 sql 映射文件的路径-->
+    <mappers>
+        <!--<mapper resource=""/>-->
+
+        <!--Mapper 代理方式: 包扫描-->
+        <!--<package name=""/>-->
+    </mappers>
+</configuration>
