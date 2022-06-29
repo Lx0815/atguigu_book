@@ -16,6 +16,7 @@ import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.lang.reflect.TypeVariable;
 import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
@@ -46,7 +47,7 @@ public class DispatcherServlet extends ViewBaseServlet {
 
         String operate = request.getParameter("operate");
         if (operate == null || "".equals(operate)) {
-            super.processTemplate("index", request, response);
+            super.processTemplate("user/login", request, response);
             return;
         }
 
@@ -55,10 +56,10 @@ public class DispatcherServlet extends ViewBaseServlet {
         if (matcher.find()) {
             servletPath = matcher.group(0);
         }
-        Object bean = beanFactory.getBean(servletPath);
+        Object bean = beanFactory.getBean(servletPath + "Controller");
 
         if (bean == null) {
-            throw new RuntimeException("bean 对象不存在");
+            throw new RuntimeException(servletPath + " 对象不存在");
         }
 
         try {
@@ -66,7 +67,7 @@ public class DispatcherServlet extends ViewBaseServlet {
             Method[] beanClassDeclaredMethods = beanClass.getDeclaredMethods();
             for (Method beanClassDeclaredMethod : beanClassDeclaredMethods) {
                 if (beanClassDeclaredMethod.getName().equals(operate)) {
-                    TypeVariable<Method>[] parameters = beanClassDeclaredMethod.getTypeParameters();
+                    Parameter[] parameters = beanClassDeclaredMethod.getParameters();
                     Object[] params = new Object[parameters.length];
                     // 获取参数
                     for (int i = 0; i < parameters.length; i++) {
@@ -78,7 +79,7 @@ public class DispatcherServlet extends ViewBaseServlet {
                         } else if ("session".equals(parameterName)) {
                             params[i] = request.getSession();
                         } else {
-                            params[i] = request.getAttribute(parameterName);
+                            params[i] = request.getParameter(parameterName);
                         }
                     }
 

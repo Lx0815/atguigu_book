@@ -2,6 +2,7 @@ package book.pojo;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author: Ding
@@ -27,6 +28,11 @@ public class Order {
     private LocalDateTime orderDatetime;
 
     /**
+     * 订单所属用户
+     */
+    private User orderUser;
+
+    /**
      * 订单金额
      */
     private BigDecimal orderMoney;
@@ -36,11 +42,17 @@ public class Order {
      */
     private Integer orderStatus;
 
+    /**
+     * 订单详情
+     */
+    private List<OrderItem> orderItemList;
+
     public Order() {}
 
-    public Order(String orderNumber, LocalDateTime orderDatetime, BigDecimal orderMoney, Integer orderStatus) {
+    public Order(String orderNumber, LocalDateTime orderDatetime, User orderUser, BigDecimal orderMoney, Integer orderStatus) {
         this.orderNumber = orderNumber;
         this.orderDatetime = orderDatetime;
+        this.orderUser = orderUser;
         this.orderMoney = orderMoney;
         this.orderStatus = orderStatus;
     }
@@ -69,6 +81,14 @@ public class Order {
         this.orderDatetime = orderDatetime;
     }
 
+    public User getOrderUser() {
+        return orderUser;
+    }
+
+    public void setOrderUser(User orderUser) {
+        this.orderUser = orderUser;
+    }
+
     public BigDecimal getOrderMoney() {
         return orderMoney;
     }
@@ -83,5 +103,13 @@ public class Order {
 
     public void setOrderStatus(Integer orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public List<OrderItem> getOrderItemList() {
+        return orderItemList;
+    }
+
+    public void setOrderItemList(List<OrderItem> orderItemList) {
+        this.orderItemList = orderItemList;
     }
 }

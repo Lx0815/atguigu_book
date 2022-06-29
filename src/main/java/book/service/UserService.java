@@ -1,6 +1,8 @@
 package book.service;
 
+import book.mapper.UserMapper;
 import book.pojo.User;
+import book.utils.TransactionUtils;
 
 /**
  * @author: Ding
@@ -11,7 +13,7 @@ import book.pojo.User;
 
 public class UserService {
     public User login(String username, String pwd) {
-        // 事务管理器
-        return null;
+        UserMapper mapper = TransactionUtils.getMapper(UserMapper.class);
+        return mapper.selectByUsernameAndPassword(username, pwd);
     }
 }

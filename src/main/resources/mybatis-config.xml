@@ -28,7 +28,7 @@
 
     <!--类型别名 : 给mapper接口映射到的xml文件的 resultType 属性起别名，默认别名是类名，且不区分大小写-->
     <typeAliases>
-        <package name=""/>
+        <package name="book.pojo"/>
     </typeAliases>
 
     <!--    配置自定义类型转换器-->
@@ -72,6 +72,6 @@
         <!--<mapper resource=""/>-->
 
         <!--Mapper 代理方式: 包扫描-->
-        <!--<package name=""/>-->
+        <package name="book.mapper"/>
     </mappers>
 </configuration>
