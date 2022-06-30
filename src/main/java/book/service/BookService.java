@@ -33,4 +33,9 @@ public class BookService {
         BookMapper mapper = TransactionUtils.getMapper(BookMapper.class);
         return mapper.selectAllCount();
     }
+
+    public Book selectById(int bookId) {
+        BookMapper mapper = TransactionUtils.getMapper(BookMapper.class);
+        return mapper.selectById(bookId);
+    }
 }

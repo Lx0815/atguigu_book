@@ -8,11 +8,45 @@
         <association property="user" javaType="user"
                      column="{id=user_id}" select="book.mapper.UserMapper.selectById"/>
     </resultMap>
+    <insert id="insertOne">
+        INSERT INTO bookdb.t_cart_item (book, buy_count, user_id, all_price)
+                VALUES (#{book.id}, #{buyCount}, #{user.id}, #{allPrice})
+    </insert>
+
+    <update id="updateById">
+        UPDATE bookdb.t_cart_item
+        <set>
+            <if test="book != null">
+                book = #{book.id},
+            </if>
+
+            <if test="buyCount != null">
+                buy_count = #{buyCount},
+            </if>
+
+            <if test="user != null">
+                user_id = #{user.id},
+            </if>
+
+            <if test="allPrice != null">
+                all_price = #{allPrice},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
 
     <select id="selectByUserId" resultMap="cartItemMap">
         SELECT id, book, buy_count, user_id, all_price
         FROM bookdb.t_cart_item
         WHERE user_id = #{userId}
+    </select>
+    <select id="selectByUserIdAndBookId" resultMap="cartItemMap">
+        SELECT id, book, buy_count, user_id, all_price
+        FROM bookdb.t_cart_item
+        WHERE
+              user_id = #{userId}
+            AND
+              book = #{bookId}
     </select>
 
 </mapper>

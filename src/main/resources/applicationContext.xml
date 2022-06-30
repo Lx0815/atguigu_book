@@ -28,4 +28,9 @@
         <property name="cartItemService" ref="cartItemService"/>
     </bean>
 
+    <bean id="cartItemController" class="book.controller.CartItemController">
+        <property name="bookService" ref="bookService"/>
+        <property name="cartItemService" ref="cartItemService"/>
+    </bean>
+
 </beans>

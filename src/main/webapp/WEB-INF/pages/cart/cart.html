@@ -10,6 +10,7 @@
     <script type="text/javascript" th:src="@{/static/script/jquery-1.7.2.js}"></script>
     <script type="text/javascript">
         $(function () {
+            // 计算总金额
             $(".cart-item-checkbox").each(function () {
 
                 $(this).click(function () {
@@ -21,6 +22,16 @@
                     $("#all-price-span").text(sumPrice);
                 })
             })
+
+            // 增加书籍数量
+            $(".count+").each(function () {
+                $(this).click(function () {
+                    let buyCount = $(this).prev().val();
+                    alert(buyCount)
+                    $(this).prev().val(buyCount + 1);
+                })
+            })
+
         })
     </script>
 </head>
@@ -65,9 +76,13 @@
                 </td>
                 <td th:text="${cartItem.book.bookName}"></td>
                 <td>
-                    <span class="count">-</span>
-                    <input class="count-num" type="text" th:value="${cartItem.buyCount}"/>
-                    <span class="count">+</span>
+
+                    <form method="post" th:action="@{cartItem.do}">
+                        <input type="hidden" name="operate" value="addInCart">
+                        <span class="count-">-</span>
+                        <input class="count-num" type="text" name="buyCount" th:value="${cartItem.buyCount}"/>
+                        <span class="count+">+</span>
+                    </form>
                 </td>
                 <td th:text="${cartItem.book.price}"></td>
                 <td class="cart-all-price" th:text="${cartItem.allPrice}"></td>

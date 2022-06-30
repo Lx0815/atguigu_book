@@ -95,14 +95,16 @@ public class DispatcherServlet extends ViewBaseServlet {
 
                     if (resultObj instanceof String) {
                         resultStr = (String) resultObj;
+                    } else if (resultObj == null) {
+                        return;
                     } else {
                         throw new RuntimeException("Controller 层的方法没有以 String 为返回值");
                     }
 
                     if (resultStr.startsWith("thymeleaf:")) {
                         super.processTemplate(resultStr.substring(10), request, response);
-                    } else {
-                        // 暂无
+                    } else if (resultStr.startsWith("script:")) {
+                        response.getWriter().write(resultStr.substring(7));
                     }
                 }
             }
