@@ -20,9 +20,14 @@
                 <i class="iconfont icon-ai-arrow-down"></i>
             </div>
             <div class="topbar-right">
-                <a href="user/login.html" class="login">登录</a>
-                <a href="user/regist.html" class="register">注册</a>
-                <a href="cart/cart.html" class="cart iconfont icon-gouwuche">
+                <div th:if="${session.user} == null">
+                    <a th:href="@{/page.do?operate='toLogin'}" class="login">登录</a>
+                    <a th:href="@{/page.do?operate='toRegist'}" class="register">注册</a>
+                </div>
+                <div th:unless="${session.user == null}">
+                    <p th:text="${session.user.username}"></p>
+                </div>
+                <a th:href="@{/WEB-INF/pages/crat/cart.html}" class="cart iconfont icon-gouwuche">
                     购物车
                     <div class="cart-num">3</div>
                 </a>
@@ -428,7 +433,7 @@
 
 
 </div>
-<script src="../../static/script/swiper.min.js"></script>
+<script th:src="@{/static/script/swiper.min.js}"></script>
 <script>
     var swiper = new Swiper('.swiper-container', {
         autoplay: true,

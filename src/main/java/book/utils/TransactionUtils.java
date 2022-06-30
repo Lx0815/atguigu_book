@@ -96,6 +96,7 @@ public class TransactionUtils {
         SqlSession sqlSession = getSessionOrCreate("未开启事务 / 事务已关闭 的情况下就尝试 进行回滚操作");
         sqlSession.rollback();
         sqlSession.close();
+        threadLocal.set(null);
     }
 
     /**
@@ -105,6 +106,7 @@ public class TransactionUtils {
         SqlSession sqlSession = getSessionOrCreate("未开启事务 / 事务已关闭 的情况下就尝试 进行提交操作");
         sqlSession.commit();
         sqlSession.close();
+        threadLocal.set(null);
     }
 
     /**

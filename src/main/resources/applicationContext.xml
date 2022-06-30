@@ -20,7 +20,7 @@
         <property name="userService" ref="userService"/>
     </bean>
 
-    <bean id="indexController" class="book.controller.IndexController">
+    <bean id="pageController" class="book.controller.PageController">
         <property name="bookService" ref="bookService"/>
     </bean>
 

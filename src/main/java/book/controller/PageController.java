@@ -14,7 +14,7 @@ import java.util.List;
  * @modify:
  */
 
-public class IndexController {
+public class PageController {
 
     private BookService bookService;
 
@@ -31,4 +31,13 @@ public class IndexController {
             TransactionUtils.commit();
         }
     }
+
+    public String toLogin() {
+        return "thymeleaf:user/login";
+    }
+
+    public String toRegist() {
+        return "thymeleaf:user/regist";
+    }
+
 }

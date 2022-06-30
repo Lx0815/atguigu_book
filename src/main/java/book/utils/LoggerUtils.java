@@ -40,7 +40,7 @@ public class LoggerUtils {
      * @param message 日志信息
      */
     public static void logInfo(String message) {
-        logInfo(0, message);
+        logInfo(1, message);
     }
 
     /**
