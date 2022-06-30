@@ -8,8 +8,8 @@
 <mapper namespace="book.mapper.UserMapper">
 
     <insert id="insertOneByUser">
-        insert into bookdb.t_user (username, password, email, role)
-            values (#{username}, #{password}, #{email}, #{role});
+        INSERT INTO bookdb.t_user (username, password, email, role)
+            VALUES (#{username}, #{password}, #{email}, #{role});
     </insert>
 
     <select id="selectByUsernameAndPassword" resultType="user">
@@ -20,4 +20,11 @@
             AND
               password = #{password};
     </select>
+    <select id="selectById" resultType="book.pojo.User">
+        SELECT id, username, password, email, role
+        FROM bookdb.t_user
+        WHERE id = #{id}
+    </select>
+
+
 </mapper>

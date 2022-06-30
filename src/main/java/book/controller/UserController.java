@@ -1,11 +1,14 @@
 package book.controller;
 
+import book.pojo.CartItem;
 import book.pojo.User;
+import book.service.CartItemService;
 import book.service.UserService;
 import book.utils.LoggerUtils;
 import book.utils.TransactionUtils;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * @author: Ding
@@ -17,6 +20,8 @@ import javax.servlet.http.HttpSession;
 public class UserController {
 
     private UserService userService;
+
+    private CartItemService cartItemService;
 
     /**
      * 处理登录请求
@@ -37,7 +42,9 @@ public class UserController {
             if (user != null) {
                 // 登录成功
                 LoggerUtils.logInfo(user.getId() + " 登陆成功");
+                List<CartItem> cartItemList = cartItemService.getAllCartItemsByUser(user);
                 session.setAttribute("user", user);
+                session.setAttribute("cartItemList", cartItemList);
                 return "thymeleaf:user/login_success";
             } else {
                 // 登录失败

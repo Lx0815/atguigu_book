@@ -16,12 +16,16 @@
 
     <bean id="bookService" class="book.service.BookService"/>
 
+    <bean id="cartItemService" class="book.service.CartItemService"/>
+
     <bean id="userController" class="book.controller.UserController">
         <property name="userService" ref="userService"/>
+        <property name="cartItemService" ref="cartItemService"/>
     </bean>
 
     <bean id="pageController" class="book.controller.PageController">
         <property name="bookService" ref="bookService"/>
+        <property name="cartItemService" ref="cartItemService"/>
     </bean>
 
 </beans>

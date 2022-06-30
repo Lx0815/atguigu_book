@@ -17,4 +17,7 @@ public interface UserMapper {
 
     Integer insertOneByUser(User user);
 
+
+    User selectById(@Param("id") Integer id);
+
 }

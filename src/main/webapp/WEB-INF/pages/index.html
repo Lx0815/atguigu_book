@@ -27,11 +27,13 @@
                 <div th:unless="${session.user == null}">
                     <p th:text="${session.user.username}"></p>
                 </div>
-                <a th:href="@{/WEB-INF/pages/crat/cart.html}" class="cart iconfont icon-gouwuche">
+                <a th:href="@{/page.do?operate=toCartItem}" class="cart iconfont icon-gouwuche">
                     购物车
-                    <div class="cart-num">3</div>
+                    <div class="cart-num" th:text="${session.cartItemList.size()}"></div>
                 </a>
-                <a href="manager/book_manager.html" class="admin">后台管理</a>
+                <div th:if="${session.user.role} == 0">
+                    <a href="manager/book_manager.html" class="admin">后台管理</a>
+                </div>
             </div>
             <!--          登录后风格-->
             <!--          <div class="topbar-right">-->

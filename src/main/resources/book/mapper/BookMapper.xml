@@ -14,4 +14,10 @@
         SELECT id, book_count, book_name, price, book_img, author, sale_count, book_status
         FROM bookdb.t_book
     </select>
+
+    <select id="selectById" resultMap="bookMap">
+        SELECT id, book_count, book_name, price, book_img, author, sale_count, book_status
+        FROM bookdb.t_book
+        WHERE id = #{id}
+    </select>
 </mapper>

@@ -18,7 +18,7 @@ public class Book {
     /**
      * 库存
      */
-    private int bookCount;
+    private Integer bookCount;
 
     /**
      * 书名
@@ -43,7 +43,7 @@ public class Book {
     /**
      * 销量
      */
-    private int saleCount;
+    private Integer saleCount;
 
     /**
      * 图书状态
@@ -52,7 +52,7 @@ public class Book {
 
     public Book() {}
 
-    public Book(int bookCount, String bookName, BigDecimal price, String bookImg, String author, int saleCount, Integer bookStatus) {
+    public Book(int bookCount, String bookName, BigDecimal price, String bookImg, String author, Integer saleCount, Integer bookStatus) {
         this.bookCount = bookCount;
         this.bookName = bookName;
         this.price = price;
@@ -70,11 +70,11 @@ public class Book {
         this.id = id;
     }
 
-    public int getBookCount() {
+    public Integer getBookCount() {
         return bookCount;
     }
 
-    public void setBookCount(int bookCount) {
+    public void setBookCount(Integer bookCount) {
         this.bookCount = bookCount;
     }
 
@@ -110,11 +110,11 @@ public class Book {
         this.author = author;
     }
 
-    public int getSaleCount() {
+    public Integer getSaleCount() {
         return saleCount;
     }
 
-    public void setSaleCount(int saleCount) {
+    public void setSaleCount(Integer saleCount) {
         this.saleCount = saleCount;
     }
 

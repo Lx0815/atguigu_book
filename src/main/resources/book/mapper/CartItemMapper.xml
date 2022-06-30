@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="book.mapper.CartItemMapper">
+
+    <resultMap id="cartItemMap" type="cartItem">
+        <association property="book" javaType="book"
+                     column="{id=book}" select="book.mapper.BookMapper.selectById"/>
+        <association property="user" javaType="user"
+                     column="{id=user_id}" select="book.mapper.UserMapper.selectById"/>
+    </resultMap>
+
+    <select id="selectByUserId" resultMap="cartItemMap">
+        SELECT id, book, buy_count, user_id, all_price
+        FROM bookdb.t_cart_item
+        WHERE user_id = #{userId}
+    </select>
+
+</mapper>
