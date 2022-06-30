@@ -7,7 +7,7 @@
     <link rel="stylesheet" th:href="@{/static/css/minireset.css}"/>
     <link rel="stylesheet" th:href="@{/static/css/common.css}"/>
     <link rel="stylesheet" th:href="@{/static/css/cart.css}"/>
-    <script type="text/javascript" th:src="@{/static/script/jquery-1.7.2.js}"></script>
+    <script type="text/javascript" th:src="@{/static/script/J-3.6.0.js}"></script>
     <script type="text/javascript">
         $(function () {
             // 计算总金额
@@ -21,17 +21,57 @@
                     })
                     $("#all-price-span").text(sumPrice);
                 })
-            })
+            });
 
             // 增加书籍数量
-            $(".count+").each(function () {
+            $(".count-add").each(function () {
                 $(this).click(function () {
-                    let buyCount = $(this).prev().val();
-                    alert(buyCount)
+                    let buyCount = $(this).prev().val() - 0;
                     $(this).prev().val(buyCount + 1);
+                })
+            });
+            // 减少书籍数量
+            $(".count-minus").each(function () {
+                $(this).click(function () {
+                    let buyCount = $(this).next().val() - 1;
+                    $(this).next().val(buyCount);
+                })
+            });
+            // 绑定鼠标离开表单事件
+            $(".buy-count-form").each(function () {
+                $(this).mouseout(function () {
+                    // alert($(this).children(":submit").is(":submit"))
+                    // alert($(this).children().last().is(":submit"))
+                    // if (confirm("确定修改数量吗？")) {
+                        // alert($(this).children(":submit")[0].value)
+                        // $(this).children(":submit")[0].onsubmit = function () {
+                        //     alert("提交表单")
+                        //     return true;
+                        // }
+                        $(this).submit();
+                        // alert("提交成功")
+                    // }
                 })
             })
 
+            // 去结账
+            let $pay = $(".pay:first");
+            $pay.click(function () {
+                let cartItemIds = "";
+
+                // 找到所有选中的 bookId
+                $(".cart-item-checkbox:checked").each(function () {
+                    let id = $(".cart-item-checkbox:checked").siblings(":first").val();
+                    cartItemIds += id + ","
+                })
+
+                $pay.siblings("[name='bookIds']").val(cartItemIds);
+                $pay.siblings("[name='allPrice']").val($("#all-price-span").text())
+
+                $pay.parent().submit();
+
+                return false;
+            })
         })
     </script>
 </head>
@@ -56,7 +96,6 @@
 <div class="list">
     <div class="w">
         <table>
-            <thead>
             <tr>
                 <th>全选</th>
                 <th>图片</th>
@@ -67,27 +106,28 @@
                 <th>金额</th>
                 <th>操作</th>
             </tr>
-            </thead>
-            <tbody>
             <tr th:each="cartItem : ${session.cartItemList}">
-                <td><input type="checkbox" class="cart-item-checkbox"></td>
+                <td><input type="checkbox" class="cart-item-checkbox"><input type="hidden" th:value="${cartItem.id}"></td>
                 <td>
                     <img th:src="${cartItem.book.bookImg}">
                 </td>
                 <td th:text="${cartItem.book.bookName}"></td>
                 <td>
 
-                    <form method="post" th:action="@{cartItem.do}">
-                        <input type="hidden" name="operate" value="addInCart">
-                        <span class="count-">-</span>
-                        <input class="count-num" type="text" name="buyCount" th:value="${cartItem.buyCount}"/>
-                        <span class="count+">+</span>
+                    <form class="buy-count-form" method="post" th:action="@{/cartItem.do}">
+                        <input type="hidden" name="operate" value="cartAddCart">
+                        <input type="hidden" name="bookId" th:value="${cartItem.book.id}">
+                        <input type="hidden" name="id" th:value="${cartItem.id}">
+                        <input type="button" value="-" class="count-minus"/>
+                        <input class="count-num" type="text" name="newBuyCount" th:value="${cartItem.buyCount}"/>
+                        <input type="button" value="+" class="count-add"/>
+                        <input hidden="hidden" type="submit" value="提交表单submit">
                     </form>
+
                 </td>
                 <td th:text="${cartItem.book.price}"></td>
                 <td class="cart-all-price" th:text="${cartItem.allPrice}"></td>
             </tr>
-            </tbody>
         </table>
         <div class="footer">
             <div class="footer-left">
@@ -97,7 +137,13 @@
             <div class="footer-right">
                 <div>共<span ></span>件商品</div>
                 <div class="total-price">总金额<span id="all-price-span">0</span>元</div>
-                <a class="pay" th:href="@{/page.do?operate=toCheckout}">去结账</a>
+                <form th:action="@{/cartItem.do}" method="post">
+                    <input type="hidden" name="operate" value="pay">
+                    <input type="hidden" name="cartItemIds" value="">
+                    <input type="hidden" name="allPrice" value="">
+
+                    <a class="pay" th:href="@{/page.do}">去结账</a>
+                </form>
             </div>
         </div>
     </div>

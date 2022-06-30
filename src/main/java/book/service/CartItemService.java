@@ -41,4 +41,9 @@ public class CartItemService {
         CartItemMapper mapper = TransactionUtils.getMapper(CartItemMapper.class);
         mapper.updateById(cartItem);
     }
+
+    public void deleteByIds(Integer[] cartItemIdsArr) {
+        CartItemMapper mapper = TransactionUtils.getMapper(CartItemMapper.class);
+        mapper.deleteByIds(cartItemIdsArr);
+    }
 }

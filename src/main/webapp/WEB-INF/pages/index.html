@@ -152,8 +152,8 @@
                         <p th:text="价格 + ':' + ${book.price}"></p>
                         <p th:text="销量 + ':' + ${book.saleCount}"></p>
                         <p th:text="库存 + ':' + ${book.bookCount}"></p>
-                        <form method="post" th:action="@{/cartItem.do}" target="iframe">
-                            <input hidden="hidden" name="operate" value="addInCart">
+                        <form method="post" th:action="@{/cartItem.do}">
+                            <input hidden="hidden" name="operate" value="indexAddCart">
                             <input hidden="hidden" name="bookId" th:value="${book.id}">
                             <button class="add-cart-btn">加入购物车</button>
                             <input hidden="hidden" type="submit">

@@ -94,7 +94,7 @@ public class PageController {
     }
 
     public String toCheckout() {
-        return null;
+        return "thymeleaf:cart/checkout";
     }
 
 }

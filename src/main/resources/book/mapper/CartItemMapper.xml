@@ -35,6 +35,17 @@
         WHERE id = #{id}
     </update>
 
+
+    <delete id="deleteByIds">
+        DELETE FROM bookdb.t_cart_item
+        <where>
+            id IN
+            <foreach collection="#{ids}" item="id" separator="," open="(" close=")">
+                #{id}
+            </foreach>
+        </where>
+    </delete>
+
     <select id="selectByUserId" resultMap="cartItemMap">
         SELECT id, book, buy_count, user_id, all_price
         FROM bookdb.t_cart_item
