@@ -10,13 +10,15 @@
     <script type="text/javascript" th:src="@{/static/script/jquery-1.7.2.js}"></script>
     <script type="text/javascript">
         $(function () {
-            let price = 0;
             $(".cart-item-checkbox").each(function () {
+
                 $(this).click(function () {
-                    let text = $(".cart-item-checkbox:checked").parent().siblings(":last").text() - 0;
-                    // alert(text)
-                    price += text;
-                    $("#all-price-span").text(price);
+                    let sumPrice = 0;
+                    $(".cart-item-checkbox:checked").each(function () {
+                        let number = $(this).parent().siblings(":last").text() - 0;
+                        sumPrice += number;
+                    })
+                    $("#all-price-span").text(sumPrice);
                 })
             })
         })
@@ -70,84 +72,6 @@
                 <td th:text="${cartItem.book.price}"></td>
                 <td class="cart-all-price" th:text="${cartItem.allPrice}"></td>
             </tr>
-<!--            <tr>-->
-<!--                <td>-->
-<!--                    <img th:src="@{/static/uploads/huozhe.jpg}" alt=""/>-->
-<!--                </td>-->
-<!--                <td>活着</td>-->
-<!--                <td>-->
-<!--                    <span class="count">-</span>-->
-<!--                    <input class="count-num" type="text" value="1"/>-->
-<!--                    <span class="count">+</span>-->
-<!--                </td>-->
-<!--                <td>36.8</td>-->
-<!--                <td>36.8</td>-->
-<!--                <td><a href="">删除</a></td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--                <td>-->
-<!--                    <img th:src="@{/static/uploads/kanjian.jpg}" alt=""/>-->
-<!--                </td>-->
-<!--                <td>看见</td>-->
-<!--                <td>-->
-<!--                    <span class="count">-</span>-->
-<!--                    <input class="count-num" type="text" value="1"/>-->
-<!--                    <span class="count">+</span>-->
-<!--                </td>-->
-<!--                <td>40.1</td>-->
-<!--                <td>40.1</td>-->
-<!--                <td><a href="">删除</a></td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--                <td>-->
-<!--                    <img th:src="@{/static/uploads/kanjian.jpg}" alt=""/>-->
-<!--                </td>-->
-<!--                <td>-->
-<!--                    假如书名太长了,只展示一部分书名.自动展示省略号-->
-<!--                </td>-->
-<!--                <td>-->
-<!--                    <span class="count">-</span>-->
-<!--                    <input class="count-num" type="text" value="1"/>-->
-<!--                    <span class="count">+</span>-->
-<!--                </td>-->
-<!--                <td>40.1</td>-->
-<!--                <td>40.1</td>-->
-<!--                <td><a href="">删除</a></td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--                <td>-->
-<!--                    <img th:src="@{/static/uploads/kanjian.jpg}" alt=""/>-->
-<!--                </td>-->
-<!--                <td>-->
-<!--                    假如书名太长了,只展示一部分书名.自动展示省略号-->
-<!--                </td>-->
-<!--                <td>-->
-<!--                    &lt;!&ndash; <div> &ndash;&gt;-->
-<!--                    <span class="count">-</span>-->
-<!--                    <input class="count-num" type="text" value="100"/>-->
-<!--                    <span class="count">+</span>-->
-<!--                    &lt;!&ndash; </div> &ndash;&gt;-->
-<!--                </td>-->
-<!--                <td>40.1</td>-->
-<!--                <td>40.1</td>-->
-<!--                <td><a href="">删除</a></td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--                <td>-->
-<!--                    <img th:src="@{/static/uploads/kanjian.jpg}" alt=""/>-->
-<!--                </td>-->
-<!--                <td>-->
-<!--                    假如书名太长了,只展示一部分书名.自动展示省略号-->
-<!--                </td>-->
-<!--                <td>-->
-<!--                    <span class="count">-</span>-->
-<!--                    <input class="count-num" type="text" value="99"/>-->
-<!--                    <span class="count">+</span>-->
-<!--                </td>-->
-<!--                <td>40.1</td>-->
-<!--                <td>40.1</td>-->
-<!--                <td><a href="">删除</a></td>-->
-<!--            </tr>-->
             </tbody>
         </table>
         <div class="footer">
@@ -160,7 +84,7 @@
                     JS 实现数量、价格的计算 -- 未测试
                 -->
                 <div>共<span ></span>件商品</div>
-                <div class="total-price">总金额<span id="all-price-span"></span>元</div>
+                <div class="total-price">总金额<span id="all-price-span">0</span>元</div>
                 <a class="pay" th:href="@{/page.do?operate=toCheckout}">去结账</a>
             </div>
         </div>
