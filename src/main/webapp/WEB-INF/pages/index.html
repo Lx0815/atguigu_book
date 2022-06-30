@@ -168,21 +168,28 @@
 
                 </div>
                 <div class="list-footer">
-                    <div>首页</div>
-                    <div>上一页</div>
+                    <div id="limit-page-front-div">首页</div>
+<!--                    <ul>-->
+<!--                        <li class="active">1</li>-->
+<!--                        <li>2</li>-->
+<!--                        <li>3</li>-->
+<!--                    </ul>-->
                     <ul>
-                        <li class="active">1</li>
-                        <li>2</li>
-                        <li>3</li>
+                        <li id="limit-page-prepre" th:if="${session.page.pageNum > 2}" th:text="|第${session.page.pageNum - 2}页|"></li>
+                        <li id="limit-page-pre" th:if="${session.page.pageNum > 1}" th:text="|第${session.page.pageNum - 1}页|"></li>
+                        <li class="active" id="limit-page-now" th:if="${session.page.pageNum != 1}" th:text="|第${session.page.pageNum}页|"></li>
+                        <li id="limit-page-next" th:if="${session.page.pageNum + 1 < session.page.maxPageNum}" th:text="|第${session.page.pageNum + 1}页|"></li>
+                        <li id="limit-page-nextnext" th:if="${session.page.pageNum + 2 < session.page.maxPageNum}" th:text="|第${session.page.pageNum + 2}页|"></li>
                     </ul>
-                    <div>下一页</div>
-                    <div>末页</div>
-                    <span>共10页</span>
-                    <span>30条记录</span>
+                    <div id="limit-page-last-div" th:if="${session.page.maxPageNum > 1}">末页</div>
+                    <span id="all-page-span" th:text="|共${session.page.maxPageNum}页|"></span>
+                    <span id="all-count-span" th:text="|${session.page.allCount}条记录|"></span>
                     <span>到第</span>
-                    <input type="text">
-                    <span>页</span>
-                    <button>确定</button>
+                    <form th:action="@{/page.do?operate=toIndex}" method="post">
+                        <input name="pageNum" type="text">
+                        <span>页</span>
+                        <input type="submit" value="确定">
+                    </form>
                 </div>
             </div>
         </div>

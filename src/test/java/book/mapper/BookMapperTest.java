@@ -28,4 +28,15 @@ class BookMapperTest {
         List<Book> bookList = mapper.selectAll();
         bookList.forEach(System.out::println);
     }
+
+
+    @Test
+    void selectById() {
+    }
+
+    @Test
+    void selectByLimit() {
+        BookMapper mapper = TransactionUtils.getMapper(BookMapper.class);
+        System.out.println(mapper.selectByLimit(0, 15));
+    }
 }

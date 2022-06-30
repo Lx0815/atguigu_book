@@ -23,4 +23,14 @@ public class BookService {
         BookMapper bookMapper = TransactionUtils.getMapper(BookMapper.class);
         return bookMapper.selectAll();
     }
+
+    public List<Book> selectAllByLimit(int pageSize, int pageNum) {
+        BookMapper mapper = TransactionUtils.getMapper(BookMapper.class);
+        return mapper.selectByLimit((pageNum - 1) * pageSize, pageSize);
+    }
+
+    public Integer selectAllCount() {
+        BookMapper mapper = TransactionUtils.getMapper(BookMapper.class);
+        return mapper.selectAllCount();
+    }
 }
