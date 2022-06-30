@@ -57,6 +57,7 @@ public class DispatcherServlet extends ViewBaseServlet {
             servletPath = matcher.group(0);
         }
         Object bean = beanFactory.getBean(servletPath + "Controller");
+        LoggerUtils.logInfo("收到用户请求" + servletPath);
 
         if (bean == null) {
             throw new RuntimeException(servletPath + " 对象不存在");
@@ -85,7 +86,12 @@ public class DispatcherServlet extends ViewBaseServlet {
 
                     // 方法调用
                     beanClassDeclaredMethod.setAccessible(true);
-                    Object resultObj = beanClassDeclaredMethod.invoke(bean, params);
+                    Object resultObj;
+                    if (params.length == 0) {
+                        resultObj = beanClassDeclaredMethod.invoke(bean);
+                    } else {
+                        resultObj = beanClassDeclaredMethod.invoke(bean, params);
+                    }
                     String resultStr = null;
 
                     if (resultObj instanceof String) {
@@ -104,7 +110,8 @@ public class DispatcherServlet extends ViewBaseServlet {
         } catch (IllegalAccessException e) {
             throw new RuntimeException("此Method对象正在执行 Java 语言访问控制并且底层方法不可访问。");
         } catch (InvocationTargetException e) {
-            throw new RuntimeException("方法是实例方法并且指定的对象参数不是声明底层方法（或其子类或实现者）的类或接口的实例；如果实际参数和形式参数的数量不同；如果原始参数的展开转换失败；或者，如果在可能的展开之后，参数值不能通过方法调用转换转换为相应的形式参数类型。");
+//            throw new RuntimeException("方法是实例方法并且指定的对象参数不是声明底层方法（或其子类或实现者）的类或接口的实例；如果实际参数和形式参数的数量不同；如果原始参数的展开转换失败；或者，如果在可能的展开之后，参数值不能通过方法调用转换转换为相应的形式参数类型。");
+            e.printStackTrace();
         }
     }
 

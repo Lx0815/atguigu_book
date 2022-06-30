@@ -45,15 +45,21 @@ public class Book {
      */
     private int saleCount;
 
+    /**
+     * 图书状态
+     */
+    private Integer bookStatus;
+
     public Book() {}
 
-    public Book(int bookCount, String bookName, BigDecimal price, String bookImg, String author, int saleCount) {
+    public Book(int bookCount, String bookName, BigDecimal price, String bookImg, String author, int saleCount, Integer bookStatus) {
         this.bookCount = bookCount;
         this.bookName = bookName;
         this.price = price;
         this.bookImg = bookImg;
         this.author = author;
         this.saleCount = saleCount;
+        this.bookStatus = bookStatus;
     }
 
     public Integer getId() {
@@ -110,5 +116,27 @@ public class Book {
 
     public void setSaleCount(int saleCount) {
         this.saleCount = saleCount;
+    }
+
+    public Integer getBookStatus() {
+        return bookStatus;
+    }
+
+    public void setBookStatus(Integer bookStatus) {
+        this.bookStatus = bookStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", bookCount=" + bookCount +
+                ", bookName='" + bookName + '\'' +
+                ", price=" + price +
+                ", bookImg='" + bookImg + '\'' +
+                ", author='" + author + '\'' +
+                ", saleCount=" + saleCount +
+                ", bookStatus=" + bookStatus +
+                '}';
     }
 }

@@ -14,8 +14,14 @@
 
     <bean id="userService" class="book.service.UserService"/>
 
+    <bean id="bookService" class="book.service.BookService"/>
+
     <bean id="userController" class="book.controller.UserController">
         <property name="userService" ref="userService"/>
+    </bean>
+
+    <bean id="indexController" class="book.controller.IndexController">
+        <property name="bookService" ref="bookService"/>
     </bean>
 
 </beans>

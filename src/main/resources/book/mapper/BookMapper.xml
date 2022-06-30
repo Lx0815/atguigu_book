@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="book.mapper.BookMapper">
+
+    <resultMap id="bookMap" type="book">
+        <result property="bookCount" column="book_count"/>
+        <result property="bookName" column="book_name"/>
+        <result property="bookImg" column="bookImg"/>
+        <result property="saleCount" column="sale_count"/>
+        <result property="bookStatus" column="book_status"/>
+    </resultMap>
+
+    <select id="selectAll" resultMap="bookMap">
+        SELECT id, book_count, book_name, price, book_img, author, sale_count, book_status
+        FROM bookdb.t_book
+    </select>
+</mapper>
