@@ -6,6 +6,7 @@ import book.pojo.CartItem;
 import book.pojo.User;
 import book.utils.TransactionUtils;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -16,6 +17,8 @@ import java.util.List;
  */
 
 public class CartItemService {
+
+    private BookService bookService;
 
     /**
      *
@@ -45,5 +48,43 @@ public class CartItemService {
     public void deleteByIds(Integer[] cartItemIdsArr) {
         CartItemMapper mapper = TransactionUtils.getMapper(CartItemMapper.class);
         mapper.deleteByIds(cartItemIdsArr);
+    }
+
+    public CartItem getCartItemById(int id) {
+        CartItemMapper mapper = TransactionUtils.getMapper(CartItemMapper.class);
+        return mapper.selectById(id);
+    }
+
+    public void addOneCartItem(String bookId, User user) {
+        Book book = bookService.selectById(Integer.parseInt(bookId));
+        CartItem cartItem = this.getCartItemByUserAndBook(user, book);
+        if (cartItem == null) {
+            cartItem = new CartItem(book, 1, user, book.getPrice());
+            // 更新购物车记录
+            this.insertOne(cartItem);
+        } else {
+            cartItem.setBuyCount(cartItem.getBuyCount() + 1);
+            // 更新购物车记录
+            BigDecimal newAllPrice = cartItem.getBook().getPrice().multiply(new BigDecimal(cartItem.getBuyCount()));
+            cartItem.setAllPrice(newAllPrice);
+            cartItem.setBook(null);
+            cartItem.setUser(null);
+            this.updateById(cartItem);
+        }
+    }
+
+    public void doUpdateCartItem(String id, String newBuyCount, String bookId) {
+        // 创建一个新的 CartItem 用于传参
+        CartItem cartItem = new CartItem();
+        // 设置 id 用于在数据库中定位
+        cartItem.setId(Integer.parseInt(id));
+        // 设置新的购买数量
+        cartItem.setBuyCount(Integer.parseInt(newBuyCount));
+        // 根据 id 查询 book 价格
+        BigDecimal bookPrice = bookService.selectPriceById(Integer.parseInt(bookId));
+
+        cartItem.setAllPrice(bookPrice.multiply(new BigDecimal(cartItem.getBuyCount())));
+
+        this.updateById(cartItem);
     }
 }

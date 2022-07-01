@@ -1,6 +1,5 @@
 package book.utils;
 
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -60,8 +59,7 @@ public class TransactionUtils {
      * @return 返回一条 SqlSession
      */
     public static SqlSession getSqlSession() {
-        SqlSession sqlSession = getSessionOrCreate("未开启事务 / 事务已关闭 的情况下就尝试获取 SqlSession");
-        return sqlSession;
+        return getSqlSessionOrElse(true, "未开启事务 / 事务已关闭 的情况下就尝试获取 SqlSession");
     }
 
     /**
@@ -70,7 +68,7 @@ public class TransactionUtils {
      * @return 返回 Mapper 代理对象
      */
     public static <T> T getMapper(Class<T> type) {
-        SqlSession sqlSession = getSessionOrCreate("未开启事务 / 事务已关闭 的情况下就尝试获取 Mapper 代理对象");
+        SqlSession sqlSession = getSqlSessionOrElse(true, "未开启事务 / 事务已关闭 的情况下就尝试获取 Mapper 代理对象");
         return sqlSession.getMapper(type);
     }
 
@@ -79,12 +77,14 @@ public class TransactionUtils {
      * @param warnMessage 若 {@code threadLocal.get()} 为 null 时打印的 warn 日志
      * @return 返回一个可用的 SqlSession
      */
-    private static SqlSession getSessionOrCreate(String warnMessage) {
+    private static SqlSession getSqlSessionOrElse(boolean isCreate, String warnMessage) {
         SqlSession sqlSession = threadLocal.get();
         if (sqlSession == null) {
             LoggerUtils.logWarn(2, warnMessage);
-            sqlSession = createSqlSession();
-            threadLocal.set(sqlSession);
+            if (isCreate) {
+                sqlSession = createSqlSession();
+                threadLocal.set(sqlSession);
+            }
         }
         return sqlSession;
     }
@@ -93,20 +93,24 @@ public class TransactionUtils {
      * 回滚并关闭 SqlSession
      */
     public static void rollback() {
-        SqlSession sqlSession = getSessionOrCreate("未开启事务 / 事务已关闭 的情况下就尝试 进行回滚操作");
-        sqlSession.rollback();
-        sqlSession.close();
-        threadLocal.set(null);
+        SqlSession sqlSession = getSqlSessionOrElse(false, "未开启事务 / 事务已关闭 的情况下就尝试 进行回滚操作");
+        if (sqlSession != null) {
+            sqlSession.rollback();
+            sqlSession.close();
+            threadLocal.set(null);
+        }
     }
 
     /**
      * 提交并关闭 SqlSession
      */
     public static void commit() {
-        SqlSession sqlSession = getSessionOrCreate("未开启事务 / 事务已关闭 的情况下就尝试 进行提交操作");
-        sqlSession.commit();
-        sqlSession.close();
-        threadLocal.set(null);
+        SqlSession sqlSession = getSqlSessionOrElse(false, "未开启事务 / 事务已关闭 的情况下就尝试 进行提交操作");
+        if (sqlSession != null) {
+            sqlSession.commit();
+            sqlSession.close();
+            threadLocal.set(null);
+        }
     }
 
     /**

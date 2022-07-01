@@ -69,4 +69,11 @@ class CartItemMapperTest {
         mapper.updateById(cartItem);
 
     }
+
+    @Test
+    void deleteByIds() {
+        CartItemMapper mapper = TransactionUtils.getMapper(CartItemMapper.class);
+        Integer[] ids = {22};
+        mapper.deleteByIds(ids);
+    }
 }

@@ -6,6 +6,7 @@ import book.pojo.Page;
 import book.pojo.User;
 import book.service.BookService;
 import book.service.CartItemService;
+import book.service.PageService;
 import book.utils.LoggerUtils;
 import book.utils.TransactionUtils;
 
@@ -15,7 +16,7 @@ import java.util.List;
 /**
  * @author: Ding
  * @date: 2022/6/30
- * @description:
+ * @description: 页面控制器，用于处理页面跳转的请求
  * @modify:
  */
 
@@ -25,28 +26,18 @@ public class PageController {
 
     private CartItemService cartItemService;
 
-    public String toIndex(String pageNum, HttpSession session) {
+    private PageService pageService;
+
+    public String toIndex(String isExit, String pageNum, HttpSession session) {
         try {
             TransactionUtils.beginTransaction();
-//            List<Book> bookList = bookService.selectAll();
+            if ("true".equals(isExit)) {
+                session.setAttribute("user", null);
+            }
+
             // 获取每一页显示的图书数量
             String pageSize = session.getServletContext().getInitParameter("pageSize");
-            if (pageSize == null) {
-                pageSize = "15";
-                LoggerUtils.logInfo("web.xml 未指定 pageSize，已赋默认值 15");
-            }
-            // 获取当前页数
-            if (pageNum == null) {
-                pageNum = "1";
-            }
-            // 封装 page 对象
-            Page page = new Page();
-            page.setPageNum(Integer.parseInt(pageNum));
-            page.setPageSize(Integer.parseInt(pageSize));
-
-            Integer allCount = bookService.selectAllCount();
-            page.setAllCount(allCount);
-            page.setMaxPageNum(allCount / page.getPageSize() + 1);
+            Page page = pageService.getPage(pageNum, pageSize);
 
             if (page.getMaxPageNum() < page.getPageNum() || 1 > page.getPageNum()) {
                 LoggerUtils.logInfo("访问的页码超出范围，将不进行数据更新");
@@ -77,11 +68,14 @@ public class PageController {
     public String toCartItem(HttpSession session) {
         Object userObj = session.getAttribute("user");
         if (userObj == null) {
+            // 未登录
             return toLogin();
         }
         try {
             TransactionUtils.beginTransaction();
             User user = (User) userObj;
+
+            // 更新数据
             List<CartItem> cartItemList = cartItemService.getAllCartItemsByUser(user);
             session.setAttribute("cartItemList", cartItemList);
             return "thymeleaf:cart/cart";

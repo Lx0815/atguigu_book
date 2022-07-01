@@ -61,11 +61,14 @@
 
                 // 找到所有选中的 bookId
                 $(".cart-item-checkbox:checked").each(function () {
-                    let id = $(".cart-item-checkbox:checked").siblings(":first").val();
-                    cartItemIds += id + ","
+                    let id = $(".cart-item-checkbox:checked").next().val();
+                    alert("id = " + id)
+                    cartItemIds += (id + ",")
                 })
 
-                $pay.siblings("[name='bookIds']").val(cartItemIds);
+                alert("cartItemIds = " + cartItemIds)
+                $pay.prev().prev().attr("value", cartItemIds);
+                alert("val = " + $pay.prev().prev().val())
                 $pay.siblings("[name='allPrice']").val($("#all-price-span").text())
 
                 $pay.parent().submit();
@@ -79,16 +82,16 @@
 <div class="header">
     <div class="w">
         <div class="header-left">
-            <a th:href="@{page.do?operate=toIndex}">
+            <a th:href="@{page.do?operate=toIndex&isExit=false}">
                 <img th:src="@{/static/img/logo.gif}" alt=""/></a>
             <h1>我的购物车</h1>
         </div>
         <div class="header-right">
             <h3>欢迎<span th:text="${session.user.username}"></span>光临尚硅谷书城</h3>
             <div class="order"><a th:href="@{/page.do?operate=toOrder}">我的订单</a></div>
-<!--            <div class="destory"><a th:href="@{page.do?operate=toIndex}">注销</a></div>-->
+            <div class="destory"><a th:href="@{page.do?operate=toIndex&isExit=true}">注销</a></div>
             <div class="gohome">
-                <a th:href="@{page.do?operate=toIndex}">返回</a>
+                <a th:href="@{page.do?operate=toIndex&isExit=false}">返回</a>
             </div>
         </div>
     </div>
@@ -107,7 +110,10 @@
                 <th>操作</th>
             </tr>
             <tr th:each="cartItem : ${session.cartItemList}">
-                <td><input type="checkbox" class="cart-item-checkbox"><input type="hidden" th:value="${cartItem.id}"></td>
+                <td>
+                    <input type="checkbox" class="cart-item-checkbox">
+                    <input type="hidden" th:value="${cartItem.id}">
+                </td>
                 <td>
                     <img th:src="${cartItem.book.bookImg}">
                 </td>
@@ -115,7 +121,7 @@
                 <td>
 
                     <form class="buy-count-form" method="post" th:action="@{/cartItem.do}">
-                        <input type="hidden" name="operate" value="cartAddCart">
+                        <input type="hidden" name="operate" value="updateCartItem">
                         <input type="hidden" name="bookId" th:value="${cartItem.book.id}">
                         <input type="hidden" name="id" th:value="${cartItem.id}">
                         <input type="button" value="-" class="count-minus"/>
@@ -132,17 +138,17 @@
         <div class="footer">
             <div class="footer-left">
                 <a href="#" class="clear-cart">清空购物车</a>
-                <a th:href="@{page.do?operate=toIndex}">继续购物</a>
+                <a th:href="@{page.do?operate=toIndex&isExit=false}">继续购物</a>
             </div>
             <div class="footer-right">
                 <div>共<span ></span>件商品</div>
                 <div class="total-price">总金额<span id="all-price-span">0</span>元</div>
                 <form th:action="@{/cartItem.do}" method="post">
                     <input type="hidden" name="operate" value="pay">
-                    <input type="hidden" name="cartItemIds" value="">
-                    <input type="hidden" name="allPrice" value="">
+                    <input type="hidden" name="cartItemIds">
+                    <input type="hidden" name="allPrice">
 
-                    <a class="pay" th:href="@{/page.do}">去结账</a>
+                    <a class="pay" th:href="@{/page.do?operate=toIndex&isExit=false}">去结账</a>
                 </form>
             </div>
         </div>

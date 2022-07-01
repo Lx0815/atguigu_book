@@ -39,8 +39,7 @@
     <delete id="deleteByIds">
         DELETE FROM bookdb.t_cart_item
         <where>
-            id IN
-            <foreach collection="#{ids}" item="id" separator="," open="(" close=")">
+            <foreach collection="ids" item="id" separator="," open=" id IN (" close=")">
                 #{id}
             </foreach>
         </where>
@@ -58,6 +57,11 @@
               user_id = #{userId}
             AND
               book = #{bookId}
+    </select>
+    <select id="selectById" resultMap="cartItemMap">
+        SELECT id, book, buy_count, user_id, all_price
+        FROM bookdb.t_cart_item
+        WHERE id = #{id}
     </select>
 
 </mapper>

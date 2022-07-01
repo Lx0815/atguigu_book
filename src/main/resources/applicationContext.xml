@@ -16,7 +16,20 @@
 
     <bean id="bookService" class="book.service.BookService"/>
 
-    <bean id="cartItemService" class="book.service.CartItemService"/>
+    <bean id="cartItemService" class="book.service.CartItemService">
+        <property name="bookService" ref="bookService"/>
+    </bean>
+
+    <bean id="orderService" class="book.service.OrderService">
+        <property name="orderItemService" ref="orderItemService"/>
+        <property name="cartItemService" ref="cartItemService"/>
+    </bean>
+
+    <bean id="orderItemService" class="book.service.OrderItemService"/>
+
+    <bean id="pageService" class="book.service.PageService">
+        <property name="bookService" ref="bookService"/>
+    </bean>
 
     <bean id="userController" class="book.controller.UserController">
         <property name="userService" ref="userService"/>
@@ -31,6 +44,8 @@
     <bean id="cartItemController" class="book.controller.CartItemController">
         <property name="bookService" ref="bookService"/>
         <property name="cartItemService" ref="cartItemService"/>
+        <property name="orderService" ref="orderService"/>
+        <property name="orderItemService" ref="orderItemService"/>
     </bean>
 
 </beans>

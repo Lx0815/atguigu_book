@@ -21,20 +21,20 @@ public class OrderItem {
     /**
      * 订单中交易的书的数量
      */
-    private Integer bookCount;
+    private Integer buyCount;
 
     /**
      * 所属订单
      */
-    private Order orderId;
+    private Order order;
 
     public OrderItem() {
     }
 
-    public OrderItem(Book book, Integer bookCount, Order orderId) {
+    public OrderItem(Book book, Integer bookCount, Order order) {
         this.book = book;
-        this.bookCount = bookCount;
-        this.orderId = orderId;
+        this.buyCount = bookCount;
+        this.order = order;
     }
 
     public Integer getId() {
@@ -54,18 +54,28 @@ public class OrderItem {
     }
 
     public Integer getBookCount() {
-        return bookCount;
+        return buyCount;
     }
 
     public void setBookCount(Integer bookCount) {
-        this.bookCount = bookCount;
+        this.buyCount = bookCount;
     }
 
     public Order getOrderId() {
-        return orderId;
+        return order;
     }
 
     public void setOrderId(Order orderId) {
-        this.orderId = orderId;
+        this.order = orderId;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderItem{" +
+                "id=" + id +
+                ", book=" + book +
+                ", buyCount=" + buyCount +
+                ", order=" + order +
+                '}';
     }
 }

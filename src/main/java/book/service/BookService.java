@@ -4,6 +4,7 @@ import book.mapper.BookMapper;
 import book.pojo.Book;
 import book.utils.TransactionUtils;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -37,5 +38,20 @@ public class BookService {
     public Book selectById(int bookId) {
         BookMapper mapper = TransactionUtils.getMapper(BookMapper.class);
         return mapper.selectById(bookId);
+    }
+
+    public BigDecimal selectPriceById(int id) {
+        BookMapper mapper = TransactionUtils.getMapper(BookMapper.class);
+        return mapper.selectPriceById(id);
+    }
+
+    public Integer selectRemainingStockByCartItemId(Integer cartItemId) {
+        BookMapper mapper = TransactionUtils.getMapper(BookMapper.class);
+        return mapper.selectRemainingStockByCartItemId(cartItemId);
+    }
+
+    public void updateById(Book book) {
+        BookMapper mapper = TransactionUtils.getMapper(BookMapper.class);
+        mapper.updateById(book);
     }
 }

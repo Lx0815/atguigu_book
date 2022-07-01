@@ -56,7 +56,7 @@ public class DispatcherServlet extends ViewBaseServlet {
             servletPath = matcher.group(0);
         }
         Object bean = beanFactory.getBean(servletPath + "Controller");
-        LoggerUtils.logInfo("收到用户请求" + servletPath);
+        LoggerUtils.logInfo("收到用户请求: " + servletPath + " <==> " + operate);
 
         if (bean == null) {
             throw new RuntimeException(servletPath + " 对象不存在");

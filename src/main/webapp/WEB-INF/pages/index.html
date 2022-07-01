@@ -21,8 +21,8 @@
             </div>
             <div class="topbar-right">
                 <div th:if="${session.user} == null">
-                    <a th:href="@{/page.do?operate='toLogin'}" class="login">登录</a>
-                    <a th:href="@{/page.do?operate='toRegist'}" class="register">注册</a>
+                    <a th:href="@{/page.do?operate=toLogin}" class="login">登录</a>
+                    <a th:href="@{/page.do?operate=toRegist}" class="register">注册</a>
                 </div>
                 <div th:unless="${session.user == null}">
                     <p th:text="${session.user.username}"></p>

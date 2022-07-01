@@ -112,4 +112,17 @@ public class Order {
     public void setOrderItemList(List<OrderItem> orderItemList) {
         this.orderItemList = orderItemList;
     }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", orderNumber='" + orderNumber + '\'' +
+                ", orderDatetime=" + orderDatetime +
+                ", orderUser=" + orderUser +
+                ", orderMoney=" + orderMoney +
+                ", orderStatus=" + orderStatus +
+                ", orderItemList=" + orderItemList +
+                '}';
+    }
 }

@@ -3,6 +3,7 @@ package book.mapper;
 import book.pojo.Book;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface BookMapper {
@@ -15,4 +16,9 @@ public interface BookMapper {
 
     Integer selectAllCount();
 
+    BigDecimal selectPriceById(@Param("id") Integer id);
+
+    Integer selectRemainingStockByCartItemId(@Param("cartItemId") Integer cartItemId);
+
+    void updateById(Book book);
 }

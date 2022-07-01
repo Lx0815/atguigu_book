@@ -1,21 +1,19 @@
 package book.controller;
 
-import book.pojo.Book;
-import book.pojo.CartItem;
-import book.pojo.User;
+import book.pojo.*;
 import book.service.BookService;
 import book.service.CartItemService;
+import book.service.OrderItemService;
+import book.service.OrderService;
 import book.utils.LoggerUtils;
 import book.utils.TransactionUtils;
-import com.sun.corba.se.impl.naming.cosnaming.TransientNameServer;
+//import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.function.Function;
-import java.util.function.IntFunction;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.Objects;
 
 /**
  * @author: Ding
@@ -30,6 +28,16 @@ public class CartItemController {
 
     private BookService bookService;
 
+    private OrderService orderService;
+
+    private OrderItemService orderItemService;
+
+    /**
+     * 在首页进行添加购物车操作
+     * @param bookId 要添加的书籍
+     * @param session 会话域
+     * @return 重新渲染主页
+     */
     public String indexAddCart(String bookId, HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user == null) {
@@ -38,52 +46,37 @@ public class CartItemController {
         }
 
         try {
-
             TransactionUtils.beginTransaction();
-            Book book = bookService.selectById(Integer.parseInt(bookId));
-            CartItem cartItem = cartItemService.getCartItemByUserAndBook(user, book);
-            if (cartItem == null) {
-                cartItem = new CartItem(book, 1, user, book.getPrice());
-                // 更新购物车记录
-                cartItemService.insertOne(cartItem);
-//                return "script:<script type=\"text/javascript\">\n" +
-//                        "        alert(\"添加成功\")\n" +
-//                        "    </script>";
-            } else {
-                cartItem.setBuyCount(cartItem.getBuyCount() + 1);
-                // 更新购物车记录
-                BigDecimal newAllPrice = cartItem.getBook().getPrice().multiply(new BigDecimal(cartItem.getBuyCount()));
-                cartItem.setAllPrice(newAllPrice);
-                cartItem.setBook(null);
-                cartItem.setUser(null);
-                cartItemService.updateById(cartItem);
-//                return "script:<script type=\"text/javascript\">\n" +
-////                        "        alert(\"添加成功\")\n" +
-////                        "    </script>";
-            }
+
+            cartItemService.addOneCartItem(bookId, user);
+
+            return "thymeleaf:index";
         } catch (Exception e) {
             TransactionUtils.rollback();
             throw new RuntimeException(e);
         } finally {
             TransactionUtils.commit();
         }
-        return "thymeleaf:index";
     }
 
-    public String cartAddCart(String id, String newBuyCount, String bookId, HttpSession session) {
+    /**
+     * 在购物车页面进行添加到购物车
+     * @param id {@link CartItem#getId()}
+     * @param newBuyCount 修改后的购物车数量
+     * @param bookId 修改的图书信息
+     * @param session 会话信息
+     * @return 视图处理
+     */
+    public String updateCartItem(String id, String newBuyCount, String bookId, HttpSession session) {
         if (newBuyCount == null || bookId == null || session.getAttribute("user") == null) {
             return "thymeleaf:user/login";
         }
 
         try {
             TransactionUtils.beginTransaction();
-            CartItem cartItem = new CartItem();
-            cartItem.setId(Integer.parseInt(id));
-            cartItem.setBuyCount(Integer.parseInt(newBuyCount));
-            Book book = bookService.selectById(Integer.parseInt(bookId));
-            cartItem.setUser(((User) (session.getAttribute("user"))));
-            cartItem.setAllPrice(book.getPrice().multiply(new BigDecimal(cartItem.getBuyCount())));
-            cartItemService.updateById(cartItem);
+
+            cartItemService.doUpdateCartItem(id, newBuyCount, bookId);
+
             return "thymeleaf:cart/cart";
         } catch (Exception e) {
             TransactionUtils.rollback();
@@ -93,11 +86,22 @@ public class CartItemController {
         }
     }
 
+
+
     public String pay(String cartItemIds, String allPrice, HttpSession session) {
-        // 处理 cartItemIds
-        String[] cartItemStrArr = cartItemIds.split(",");
-        // 批量删除
-        Integer[] cartItemIdsArr = Arrays.stream(cartItemStrArr).map(Integer::parseInt).toArray(value -> new Integer[0]);
-        cartItemService.deleteByIds(cartItemIdsArr);
+        try {
+            TransactionUtils.beginTransaction();
+
+            Order order = orderService.getPayOrder(cartItemIds, allPrice, session);
+
+            session.setAttribute("order", order);
+
+            return "thymeleaf:cart/checkout";
+        } catch (Exception e) {
+            TransactionUtils.rollback();
+            throw new RuntimeException(e);
+        } finally {
+            TransactionUtils.commit();
+        }
     }
 }

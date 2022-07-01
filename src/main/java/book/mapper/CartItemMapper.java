@@ -15,5 +15,7 @@ public interface CartItemMapper {
 
     void updateById(CartItem cartItem);
 
-    void deleteByIds(@Param("ids") Integer[] cartItemIdsArr);
+    void deleteByIds(@Param("ids") Integer[] ids);
+
+    CartItem selectById(@Param("id") Integer id);
 }

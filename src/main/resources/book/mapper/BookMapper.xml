@@ -10,6 +10,36 @@
         <result property="bookStatus" column="book_status"/>
     </resultMap>
 
+    <update id="updateById">
+        UPDATE bookdb.t_book
+        <set>
+            <if test="bookCount != null and bookCount != ''">
+                book_count = #{bookCount} ,
+            </if>
+            <if test="bookName != null and bookCount != ''">
+                bookName = #{bookName} ,
+            </if>
+            <if test="price != null">
+                price = #{price}
+            </if>
+            <if test="bookImage != null and bookImage != ''">
+                bookImage = #{bookImage}
+            </if>
+            <if test="author != null and author != ''">
+                author = #{author}
+            </if>
+            <if test="saleCount != null">
+                saleCount = #{saleCount}
+            </if>
+            <if test="bookStatus != null">
+                bookStatus = #{bookStatus}
+            </if>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
     <select id="selectAll" resultMap="bookMap">
         SELECT id, book_count, book_name, price, book_img, author, sale_count, book_status
         FROM bookdb.t_book
@@ -29,5 +59,18 @@
     <select id="selectAllCount" resultType="java.lang.Integer">
         SELECT COUNT(*)
         FROM bookdb.t_book
+    </select>
+    <select id="selectPriceById" resultType="java.math.BigDecimal">
+        SELECT price
+        FROM bookdb.t_book
+        WHERE id = #{id}
+    </select>
+    <select id="selectRemainingStockByCartItemId" resultType="java.lang.Integer">
+        SELECT b.book_count - c.buy_count AS remaining_stock
+        FROM
+            bookdb.t_book b
+                join bookdb.t_cart_item c
+                     on b.id = c.book
+        where c.id = #{cartItemId}
     </select>
 </mapper>
