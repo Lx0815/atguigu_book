@@ -37,20 +37,21 @@
                     $(this).next().val(buyCount);
                 })
             });
-            // 绑定鼠标离开表单事件
+            // 绑定鼠标离开表单所在div的事件
             $(".buy-count-form").each(function () {
                 $(this).mouseout(function () {
-                    // alert($(this).children(":submit").is(":submit"))
-                    // alert($(this).children().last().is(":submit"))
-                    // if (confirm("确定修改数量吗？")) {
-                        // alert($(this).children(":submit")[0].value)
-                        // $(this).children(":submit")[0].onsubmit = function () {
-                        //     alert("提交表单")
-                        //     return true;
-                        // }
+
+                    let $old = $(this).children(".count-old-num:first");
+                    let oldVal = $old.val();
+                    // 当数目有变化时才进行提交
+                    // alert(oldVal)
+                    let newVal = $old.prev().prev().val();
+                    // alert(newVal)
+                    if (oldVal !== newVal) {
                         $(this).submit();
                         // alert("提交成功")
-                    // }
+                        // }
+                    }
                 })
             })
 
@@ -119,12 +120,14 @@
                 <td>
 
                     <form class="buy-count-form" method="post" th:action="@{/cartItem.do}">
+                        <!--此处顺序谨慎修改，若要修改，请一同修改 jQuery 选择器-->
                         <input type="hidden" name="operate" value="updateCartItem">
                         <input type="hidden" name="bookId" th:value="${cartItem.book.id}">
                         <input type="hidden" name="id" th:value="${cartItem.id}">
                         <input type="button" value="-" class="count-minus"/>
                         <input class="count-num" type="text" name="newBuyCount" th:value="${cartItem.buyCount}"/>
                         <input type="button" value="+" class="count-add"/>
+                        <input class="count-old-num" type="hidden" th:value="${cartItem.buyCount}">
                         <input hidden="hidden" type="submit" value="提交表单submit">
                     </form>
 

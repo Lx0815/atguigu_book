@@ -31,7 +31,7 @@
                     购物车
                     <div class="cart-num" th:text="${session.cartItemList.size()}"></div>
                 </a>
-                <div th:if="${session.user.role} == 0">
+                <div th:if="${session.user != null && session.user.role} == 0">
                     <a href="manager/book_manager.html" class="admin">后台管理</a>
                 </div>
             </div>
