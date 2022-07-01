@@ -7,7 +7,7 @@
     <link rel="stylesheet" th:href="@{/static/css/minireset.css}"/>
     <link rel="stylesheet" th:href="@{/static/css/common.css}"/>
     <link rel="stylesheet" th:href="@{/static/css/cart.css}"/>
-    <script type="text/javascript" th:src="@{/static/script/J-3.6.0.js}"></script>
+    <script type="text/javascript" th:src="@{/static/script/jquery-1.7.2.js}"></script>
     <script type="text/javascript">
         $(function () {
             // 计算总金额
@@ -62,13 +62,11 @@
                 // 找到所有选中的 bookId
                 $(".cart-item-checkbox:checked").each(function () {
                     let id = $(".cart-item-checkbox:checked").next().val();
-                    alert("id = " + id)
+                    // alert("id = " + id)
                     cartItemIds += (id + ",")
                 })
 
-                alert("cartItemIds = " + cartItemIds)
                 $pay.prev().prev().attr("value", cartItemIds);
-                alert("val = " + $pay.prev().prev().val())
                 $pay.siblings("[name='allPrice']").val($("#all-price-span").text())
 
                 $pay.parent().submit();

@@ -27,7 +27,6 @@ public class OrderService {
 
     private BookService bookService;
 
-
     public void insertOne(Order order) {
         OrderMapper mapper = TransactionUtils.getMapper(OrderMapper.class);
         mapper.insertOne(order);

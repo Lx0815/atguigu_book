@@ -20,9 +20,6 @@
         }
     </style>
 	<script type="text/javascript" th:src="@{/static/script/jquery-1.7.2.js}"></script>
-	<script type="text/javascript">
-
-	</script>
 </head>
 <body>
 <div class="header">
@@ -35,7 +32,7 @@
         </div>
         <div class="header-right">
             <h3>欢迎<span th:text="${session.user.username}"></span>光临尚硅谷书城</h3>
-            <div class="order"><a th:href="@{page.do?operate=toOrder">我的订单</a></div>
+            <div class="order"><a th:href="@{page.do?operate=toOrder}">我的订单</a></div>
             <div class="destory"><a th:href="@{page.do?operate=toIndex&isExit=true}">注销</a></div>
             <div class="gohome">
                 <a th:href="@{/page.do?operate=toIndex&isExit=false}">返回</a>
@@ -45,7 +42,7 @@
 </div>
 
 <div id="main">
-    <h1>你的订单已结算，订单号为:<span class="oid">546845626455846</span></h1>
+    <h1>你的订单已结算，订单号为:<span class="oid" th:text="${session.order.id}"></span></h1>
 </div>
 
 <div id="bottom">

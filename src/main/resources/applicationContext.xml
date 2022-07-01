@@ -23,6 +23,7 @@
     <bean id="orderService" class="book.service.OrderService">
         <property name="orderItemService" ref="orderItemService"/>
         <property name="cartItemService" ref="cartItemService"/>
+        <property name="bookService" ref="bookService"/>
     </bean>
 
     <bean id="orderItemService" class="book.service.OrderItemService"/>
@@ -39,6 +40,7 @@
     <bean id="pageController" class="book.controller.PageController">
         <property name="bookService" ref="bookService"/>
         <property name="cartItemService" ref="cartItemService"/>
+        <property name="pageService" ref="pageService"/>
     </bean>
 
     <bean id="cartItemController" class="book.controller.CartItemController">

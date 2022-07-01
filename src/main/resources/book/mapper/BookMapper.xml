@@ -17,22 +17,22 @@
                 book_count = #{bookCount} ,
             </if>
             <if test="bookName != null and bookCount != ''">
-                bookName = #{bookName} ,
+                book_name = #{bookName} ,
             </if>
             <if test="price != null">
                 price = #{price}
             </if>
-            <if test="bookImage != null and bookImage != ''">
-                bookImage = #{bookImage}
+            <if test="bookImg != null and bookImg != ''">
+                book_img = #{bookImg}
             </if>
             <if test="author != null and author != ''">
                 author = #{author}
             </if>
             <if test="saleCount != null">
-                saleCount = #{saleCount}
+                sale_count = #{saleCount}
             </if>
             <if test="bookStatus != null">
-                bookStatus = #{bookStatus}
+                book_status = #{bookStatus}
             </if>
         </set>
         <where>
