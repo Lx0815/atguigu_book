@@ -11,6 +11,7 @@ import book.utils.LoggerUtils;
 import book.utils.TransactionUtils;
 
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -29,32 +30,36 @@ public class PageController {
     private PageService pageService;
 
     public String toIndex(String isExit, String pageNum, HttpSession session) {
-        try {
-            TransactionUtils.beginTransaction();
-            if ("true".equals(isExit)) {
-                session.setAttribute("user", null);
-            }
-
-            // 获取每一页显示的图书数量
-            String pageSize = session.getServletContext().getInitParameter("pageSize");
-            Page page = pageService.getPage(pageNum, pageSize);
-
-            if (page.getMaxPageNum() < page.getPageNum() || 1 > page.getPageNum()) {
-                LoggerUtils.logInfo("访问的页码超出范围，将不进行数据更新");
-                return "thymeleaf:index";
-            }
-
-            // 更新数据
-            List<Book> bookList = bookService.selectAllByLimit(page.getPageSize(), page.getPageNum());
-            session.setAttribute("page", page);
-            session.setAttribute("bookList", bookList);
-            return "thymeleaf:index";
-        } catch (Exception e) {
-            TransactionUtils.rollback();
-            throw new RuntimeException(e);
-        } finally {
-            TransactionUtils.commit();
+        if ("true".equals(isExit)) {
+            session.setAttribute("user", null);
         }
+        return filterByPrice(pageNum, null, null, session);
+//        try {
+//            TransactionUtils.beginTransaction();
+//            if ("true".equals(isExit)) {
+//                session.setAttribute("user", null);
+//            }
+//
+//            // 获取每一页显示的图书数量
+//            String pageSize = session.getServletContext().getInitParameter("pageSize");
+//            Page page = pageService.getPage(pageNum, pageSize, null);
+//
+//            if (page.getMaxPageNum() < page.getPageNum() || 1 > page.getPageNum()) {
+//                LoggerUtils.logInfo("访问的页码超出范围，将不进行数据更新");
+//                return "thymeleaf:index";
+//            }
+//
+//            // 更新数据
+//            List<Book> bookList = bookService.selectAllByLimit(page.getPageSize(), page.getPageNum());
+//            session.setAttribute("page", page);
+//            session.setAttribute("bookList", bookList);
+//            return "thymeleaf:index";
+//        } catch (Exception e) {
+//            TransactionUtils.rollback();
+//            throw new RuntimeException(e);
+//        } finally {
+//            TransactionUtils.commit();
+//        }
     }
 
     public String toLogin() {
@@ -89,6 +94,29 @@ public class PageController {
 
     public String toCheckout() {
         return "thymeleaf:cart/checkout";
+    }
+
+    public String filterByPrice(String pageNum, String priceBottom, String priceTop, HttpSession session) {
+        if (priceBottom == null) priceBottom = "0";
+        if (pageNum == null) pageNum = "1";
+        if (priceTop == null) priceTop = "99999999999999";
+        try {
+            TransactionUtils.beginTransaction();
+            String pageSize = session.getServletContext().getInitParameter("pageSize");
+
+            List<Book> bookList = bookService.selectByPriceLimit(Integer.parseInt(pageSize), Integer.parseInt(pageNum), new BigDecimal(priceBottom), new BigDecimal(priceTop));
+            Page page = pageService.getPage(pageNum, pageSize, bookList);
+
+            session.setAttribute("bookList", bookList);
+            session.setAttribute("page", page);
+            return "thymeleaf:index";
+        } catch (Exception e) {
+            TransactionUtils.rollback();
+            throw new RuntimeException(e);
+        } finally {
+            TransactionUtils.commit();
+        }
+
     }
 
 }

@@ -73,4 +73,13 @@
                      on b.id = c.book
         where c.id = #{cartItemId}
     </select>
+    <select id="selectByPriceLimit" resultMap="bookMap">
+        SELECT id, book_count, book_name, price, book_img, author, sale_count, book_status
+        FROM bookdb.t_book
+        WHERE
+              price > #{priceBottom}
+            AND
+              price &lt; #{priceTop}
+        LIMIT #{pageStartRow}, #{pageSize}
+    </select>
 </mapper>

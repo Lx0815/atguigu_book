@@ -171,6 +171,9 @@
   color: #39987c;
   display: flex;
   align-items: center;
+  position: absolute;
+  right: 0;
+  top: 597px;
 }
 .books-list .list-header .price-search input {
   width: 60px;

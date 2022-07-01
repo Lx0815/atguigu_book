@@ -1,7 +1,10 @@
 package book.service;
 
+import book.pojo.Book;
 import book.pojo.Page;
 import book.utils.LoggerUtils;
+
+import java.util.List;
 
 /**
  * @author: Ding
@@ -14,7 +17,7 @@ public class PageService {
 
     private BookService bookService;
 
-    public Page getPage(String pageNum, String pageSize) {
+    public Page getPage(String pageNum, String pageSize, List<Book> bookList) {
         if (pageSize == null) {
             pageSize = "15";
             LoggerUtils.logInfo("web.xml 未指定 pageSize，已赋默认值 15");
@@ -28,7 +31,12 @@ public class PageService {
         page.setPageNum(Integer.parseInt(pageNum));
         page.setPageSize(Integer.parseInt(pageSize));
 
-        Integer allCount = bookService.selectAllCount();
+        Integer allCount;
+        if (bookList == null) {
+            allCount = bookService.selectAllCount();
+        } else {
+            allCount = bookList.size();
+        }
         page.setAllCount(allCount);
         page.setMaxPageNum(allCount / page.getPageSize() + 1);
         return page;

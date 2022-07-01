@@ -54,4 +54,9 @@ public class BookService {
         BookMapper mapper = TransactionUtils.getMapper(BookMapper.class);
         mapper.updateById(book);
     }
+
+    public List<Book> selectByPriceLimit(Integer pageSize, Integer pageNum, BigDecimal priceBottom, BigDecimal priceTop) {
+        BookMapper mapper = TransactionUtils.getMapper(BookMapper.class);
+        return mapper.selectByPriceLimit((pageNum - 1) * pageSize, pageSize, priceBottom, priceTop);
+    }
 }

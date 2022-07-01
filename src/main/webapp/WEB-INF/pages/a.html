@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+/*
+* 使用点 (.) 访问属性。相当于调用属性 getter。
+*/
+${person.father.name}
+
+/*
+* 也可以通过使用方括号 ([]) 并将属性名称写为变量或在单引号之间来访问属性。
+*/
+${person['father']['name']}
+
+/*
+* 如果对象是一个映射，点和括号语法都将等效于对其 get(...) 方法执行调用。
+*/
+${countriesByCode.ES}
+${personsByName['Stephen Zucchini'].age}
+
+/*
+* 对数组或集合的索引访问也使用括号执行，不带引号写入索引。
+*/
+${personsArray[0].name}
+
+/*
+* 可以调用方法，即使带有参数。
+*/
+${person.createCompleteName()}
+${person.createCompleteNameWithSeparator('-')}
+</body>
+</html>

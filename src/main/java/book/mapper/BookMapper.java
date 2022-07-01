@@ -21,4 +21,9 @@ public interface BookMapper {
     Integer selectRemainingStockByCartItemId(@Param("cartItemId") Integer cartItemId);
 
     void updateById(Book book);
+
+    List<Book> selectByPriceLimit(@Param("pageStartRow") Integer pageStartRow,
+                                  @Param("pageSize") Integer pageSize,
+                                  @Param("priceBottom") BigDecimal priceBottom,
+                                  @Param("priceTop") BigDecimal priceTop);
 }

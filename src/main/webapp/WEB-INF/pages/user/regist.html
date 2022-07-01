@@ -23,14 +23,14 @@
             $usernameInput.change(function () {
                 // let usernameReg = new RegExp("^(\\d|\\w){6, 16}$");
                 let usernameReg = new RegExp("^[a-z0-9_-]{6,16}$");
-                alert("val = " + $(this).val());
-                let $usernameErr = $usernameInput.parent().next();
+                // alert("val = " + $(this).val());
                 if (usernameReg.test($(this).val())) {
                     usernameMark = true;
-                    $usernameErr.hide()
+                    $(".errMess:eq(0)").css("visibility", "hidden")
                 } else {
                     usernameMark = false;
-                    $usernameErr.show()
+                    // alert("val = " + $(this).val());
+                    $(".errMess:eq(0)").css("visibility", "visible")
                 }
             })
 
@@ -40,24 +40,24 @@
             let passwordMark = false;
             let $passwordInput1 = $(".errMess:eq(1)").prev().children(":password");
             $passwordInput1.change(function () {
-                alert("val = " + $(this).val());
-                let $usernameErr = $passwordInput1.parent().next();
+                // alert("val = " + $(this).val());
                 if ($(this).val().length >= 8) {
-                    $usernameErr.hide()
+                    $(".errMess:eq(1)").css("visibility", "hidden")
                 } else {
-                    $usernameErr.show()
+                    // alert("val = " + $(this).val());
+                    $(".errMess:eq(1)").css("visibility", "visible")
                 }
             })
             let $passwordInput2 = $(".errMess:eq(2)").prev().children(":password");
             $passwordInput2.change(function () {
-                alert("val = " + $(this).val());
-                let $usernameErr = $passwordInput2.parent().next();
+                // alert("val = " + $(this).val());
                 if ($(this).val().length >= 8 && password1 === password2) {
                     passwordMark = true;
-                    $usernameErr.hide()
+                    $(".errMess:eq(2)").css("visibility", "hidden")
                 } else {
                     passwordMark = false;
-                    $usernameErr.show()
+                    // alert("val = " + $(this).val());
+                    $(".errMess:eq(2)").css("visibility", "visible")
                 }
             })
 
@@ -67,22 +67,34 @@
             $emailInput.change(function () {
                 // let emailReg = new RegExp("((\\d+)|(\\w+))@((\\d+)|(\\w+))\\.((\\d+)|(\\w+))");
                 let emailReg = new RegExp("^([a-z0-9_\.-]+)@([\\da-z\.-]+)\\.([a-z\.]{2,6})$");
-                alert("val = " + $(this).val());
+                // alert("val = " + $(this).val());
                 let $emailErr = $emailInput.parent().next();
                 if (emailReg.test($(this).val())) {
-                    $emailErr.hide()
+                    $(".errMess:eq(3)").css("visibility", "hidden")
                     emailMark = true;
                 } else {
+                    // alert("val = " + $(this).val());
                     emailMark = false;
-                    $emailErr.show()
+                    $(".errMess:eq(3)").css("visibility", "visible")
                 }
             })
 
             // btn
             $(".btn:last").click(function () {
-                if (usernameMark && passwordMark && emailMark) {
+                // if (usernameMark && passwordMark && emailMark) {
+                //     $("#register-form").submit();
+                // }
+                let isSubmit = true;
+                $(".errMess").each(function () {
+                    let css = $(this).css("visibility");
+                    if (css === "visible") {
+                        isSubmit = false;
+                    }
+                })
+                if (isSubmit) {
                     $("#register-form").submit();
                 }
+                return false;
             })
         })
 
