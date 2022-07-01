@@ -78,7 +78,13 @@ public class OrderService {
         orderItemService.insertByArr(orderItems);
 
         // 批量删除
-        Integer[] cartItemIdsArr = Arrays.stream(cartItemStrArr).filter(s -> !"".equals(s)).map(Integer::parseInt).toArray(value -> new Integer[1]);
+//        Integer[] cartItemIdsArr = Arrays.stream(cartItemStrArr).filter(s -> !"".equals(s)).map(Integer::parseInt).toArray(value -> new Integer[1]);
+        Integer[] cartItemIdsArr = new Integer[cartItemStrArr.length];
+        for (int i = 0; i < cartItemStrArr.length; i++) {
+            if (! "".equals(cartItemStrArr[i])) {
+                cartItemIdsArr[i] = Integer.parseInt(cartItemStrArr[i]);
+            }
+        }
         LoggerUtils.logInfo("cartItemIdsArr : " + Arrays.toString(cartItemIdsArr));
         cartItemService.deleteByIds(cartItemIdsArr);
         return order;

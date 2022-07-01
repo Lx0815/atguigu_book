@@ -29,7 +29,7 @@ public class User {
     private String email;
 
     /**
-     * 角色
+     * 角色 ： 普通用户为 0
      */
     private int role;
 

@@ -7,7 +7,7 @@
 -->
 <mapper namespace="book.mapper.UserMapper">
 
-    <insert id="insertOneByUser">
+    <insert id="insertOneByUser" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO bookdb.t_user (username, password, email, role)
             VALUES (#{username}, #{password}, #{email}, #{role});
     </insert>

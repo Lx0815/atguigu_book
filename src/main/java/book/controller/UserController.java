@@ -1,6 +1,5 @@
 package book.controller;
 
-import book.pojo.CartItem;
 import book.pojo.User;
 import book.service.CartItemService;
 import book.service.UserService;
@@ -8,7 +7,7 @@ import book.utils.LoggerUtils;
 import book.utils.TransactionUtils;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
+
 
 /**
  * @author: Ding
@@ -41,10 +40,10 @@ public class UserController {
             User user = userService.login(uname, pwd);
             if (user != null) {
                 // 登录成功
-                LoggerUtils.logInfo(user.getId() + " 登陆成功");
-                List<CartItem> cartItemList = cartItemService.getAllCartItemsByUser(user);
+                LoggerUtils.logInfo(user.getId() + " 号用户 " + user.getUsername() + " 登陆成功");
+
                 session.setAttribute("user", user);
-                session.setAttribute("cartItemList", cartItemList);
+
                 return "thymeleaf:user/login_success";
             } else {
                 // 登录失败
@@ -58,6 +57,29 @@ public class UserController {
         } finally {
             TransactionUtils.commit();
         }
+    }
 
+
+    public String register(String username, String password, String email, HttpSession session) {
+        if (username == null || password == null || email == null) {
+            return "thymeleaf:user/regist";
+        }
+
+        try {
+            TransactionUtils.beginTransaction();
+
+            User user = userService.register(username, password, email);
+            session.setAttribute("newUser", user);
+            if (user.getId() != 1) {
+                return "thymeleaf:user/regist_success";
+            } else {
+                return "thymeleaf:user/regist";
+            }
+        } catch (Exception e) {
+            TransactionUtils.rollback();
+            throw new RuntimeException(e);
+        } finally {
+            TransactionUtils.commit();
+        }
     }
 }
