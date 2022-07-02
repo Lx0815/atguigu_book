@@ -8,11 +8,9 @@
     </resultMap>
 
 
-
-
     <insert id="insertOne" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO bookdb.t_order (order_number, order_datetime, order_user_id, order_money, order_status)
-                VALUES (#{orderNumber}, #{orderDateTime}, #{orderUser.id}, #{orderMoney}, #{orderStatus})
+        VALUES (#{orderNumber}, #{orderDateTime}, #{orderUser.id}, #{orderMoney}, #{orderStatus})
     </insert>
 
 
@@ -21,5 +19,9 @@
         FROM bookdb.t_order
         WHERE order_user_id = #{userId}
         LIMIT #{startRow}, #{pageSize}
+    </select>
+    <select id="selectAll" resultMap="orderMap">
+        SELECT id, order_number, order_datetime, order_user_id, order_money, order_status
+        FROM bookdb.t_order
     </select>
 </mapper>

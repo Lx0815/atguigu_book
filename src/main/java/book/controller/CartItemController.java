@@ -1,11 +1,12 @@
 package book.controller;
 
-import book.pojo.*;
+import book.pojo.CartItem;
+import book.pojo.Order;
+import book.pojo.User;
 import book.service.BookService;
 import book.service.CartItemService;
 import book.service.OrderItemService;
 import book.service.OrderService;
-import book.utils.TransactionUtils;
 
 import javax.servlet.http.HttpSession;
 
@@ -28,32 +29,27 @@ public class CartItemController {
 
     /**
      * 在首页进行添加购物车操作
-     * @param bookId 要添加的书籍
+     *
+     * @param bookId  要添加的书籍
      * @param session 会话域
      * @return 重新渲染主页
      */
     public String indexAddCart(String bookId, HttpSession session) {
 
-        try {
-            TransactionUtils.beginTransaction();
-            User user = (User) session.getAttribute("user");
-            cartItemService.addOneCartItem(bookId, user);
+        User user = (User) session.getAttribute("user");
+        cartItemService.addOneCartItem(bookId, user);
 
-            return "thymeleaf:index";
-        } catch (Exception e) {
-            TransactionUtils.rollback();
-            throw new RuntimeException(e);
-        } finally {
-            TransactionUtils.commit();
-        }
+        return "thymeleaf:index";
+
     }
 
     /**
      * 在购物车页面进行添加到购物车
-     * @param id {@link CartItem#getId()}
+     *
+     * @param id          {@link CartItem#getId()}
      * @param newBuyCount 修改后的购物车数量
-     * @param bookId 修改的图书信息
-     * @param session 会话信息
+     * @param bookId      修改的图书信息
+     * @param session     会话信息
      * @return 视图处理
      */
     public String updateCartItem(String id, String newBuyCount, String bookId, HttpSession session) {
@@ -61,36 +57,22 @@ public class CartItemController {
             return "thymeleaf:user/login";
         }
 
-        try {
-            TransactionUtils.beginTransaction();
 
-            cartItemService.doUpdateCartItem(id, newBuyCount, bookId);
+        cartItemService.doUpdateCartItem(id, newBuyCount, bookId);
 
-            return "thymeleaf:cart/cart";
-        } catch (Exception e) {
-            TransactionUtils.rollback();
-            throw new RuntimeException(e);
-        } finally {
-            TransactionUtils.commit();
-        }
+        return "thymeleaf:cart/cart";
+
     }
 
 
-
     public String pay(String cartItemIds, String allPrice, HttpSession session) {
-        try {
-            TransactionUtils.beginTransaction();
 
-            Order order = orderService.createOrderByCartItem(cartItemIds, allPrice, session);
 
-            session.setAttribute("payOrder", order);
+        Order order = orderService.createOrderByCartItem(cartItemIds, allPrice, session);
 
-            return "thymeleaf:cart/checkout";
-        } catch (Exception e) {
-            TransactionUtils.rollback();
-            throw new RuntimeException(e);
-        } finally {
-            TransactionUtils.commit();
-        }
+        session.setAttribute("payOrder", order);
+
+        return "thymeleaf:cart/checkout";
+
     }
 }

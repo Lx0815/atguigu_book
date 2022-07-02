@@ -34,7 +34,7 @@
                     </div>
                 </a>
                 <div th:if="${session.user != null && session.user.role} == 0">
-                    <a href="manager/book_manager.html" class="admin">后台管理</a>
+                    <a th:href="@{/page.do(operate='toManager')}" class="admin">后台管理</a>
                 </div>
             </div>
         </div>

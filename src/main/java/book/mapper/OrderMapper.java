@@ -18,4 +18,6 @@ public interface OrderMapper {
     List<Order> selectByUserIdAndLimit(@Param("userId") Integer userId,
                                        @Param("startRow") Integer startRow,
                                        @Param("pageSize") Integer pageSize);
+
+    List<Order> selectAll();
 }

@@ -9,15 +9,17 @@ package book.servlet;
 import book.ioc.BeanFactory;
 import book.ioc.impl.BeanFactoryImpl;
 import book.utils.LoggerUtils;
+import book.utils.TransactionUtils;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -81,6 +83,9 @@ public class DispatcherServlet extends ViewBaseServlet {
                         }
                     }
 
+                    // 开启事务
+                    TransactionUtils.beginTransaction();
+
                     // 方法调用
                     beanClassDeclaredMethod.setAccessible(true);
                     Object resultObj;
@@ -91,6 +96,7 @@ public class DispatcherServlet extends ViewBaseServlet {
                     }
                     String resultStr = null;
 
+                    // 返回值校验
                     if (resultObj instanceof String) {
                         resultStr = (String) resultObj;
                     } else if (resultObj == null) {
@@ -99,6 +105,7 @@ public class DispatcherServlet extends ViewBaseServlet {
                         throw new RuntimeException("Controller 层的方法没有以 String 为返回值");
                     }
 
+                    // 视图处理
                     if (resultStr.startsWith("thymeleaf:")) {
                         super.processTemplate(resultStr.substring(10), request, response);
                     } else if (resultStr.startsWith("script:")) {
@@ -111,6 +118,10 @@ public class DispatcherServlet extends ViewBaseServlet {
         } catch (InvocationTargetException e) {
 //            throw new RuntimeException("方法是实例方法并且指定的对象参数不是声明底层方法（或其子类或实现者）的类或接口的实例；如果实际参数和形式参数的数量不同；如果原始参数的展开转换失败；或者，如果在可能的展开之后，参数值不能通过方法调用转换转换为相应的形式参数类型。");
             e.printStackTrace();
+        } catch (Exception e) {
+            TransactionUtils.rollback();
+        } finally {
+            TransactionUtils.commit();
         }
     }
 

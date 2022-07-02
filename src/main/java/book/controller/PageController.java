@@ -5,8 +5,6 @@ import book.service.BookService;
 import book.service.CartItemService;
 import book.service.OrderService;
 import book.service.PageService;
-import book.utils.LoggerUtils;
-import book.utils.TransactionUtils;
 
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
@@ -55,20 +53,14 @@ public class PageController {
 
     public String toCartItem(HttpSession session) {
 
-        try {
-            TransactionUtils.beginTransaction();
-            User user = (User) session.getAttribute("user");
 
-            // 更新数据
-            List<CartItem> cartItemList = cartItemService.getAllCartItemsByUser(user);
-            session.setAttribute("cartItemList", cartItemList);
-            return "thymeleaf:cart/cart";
-        } catch (Exception e) {
-            TransactionUtils.rollback();
-            throw new RuntimeException(e);
-        } finally {
-            TransactionUtils.commit();
-        }
+        User user = (User) session.getAttribute("user");
+
+        // 更新数据
+        List<CartItem> cartItemList = cartItemService.getAllCartItemsByUser(user);
+        session.setAttribute("cartItemList", cartItemList);
+        return "thymeleaf:cart/cart";
+
     }
 
     public String toCheckout() {
@@ -79,48 +71,51 @@ public class PageController {
         if (priceBottom == null) priceBottom = "0";
         if (pageNum == null) pageNum = "1";
         if (priceTop == null) priceTop = "99999999999999";
-        try {
-            TransactionUtils.beginTransaction();
-            String pageSize = session.getServletContext().getInitParameter("pageSize");
 
-            List<Book> bookList = bookService.selectByPriceLimit(Integer.parseInt(pageSize), Integer.parseInt(pageNum), new BigDecimal(priceBottom), new BigDecimal(priceTop));
-            Page page = pageService.getPage(pageNum, pageSize, bookList);
+        String pageSize = session.getServletContext().getInitParameter("pageSize");
 
-            session.setAttribute("bookList", bookList);
-            session.setAttribute("page", page);
-            return "thymeleaf:index";
-        } catch (Exception e) {
-            TransactionUtils.rollback();
-            throw new RuntimeException(e);
-        } finally {
-            TransactionUtils.commit();
-        }
+        List<Book> bookList = bookService.selectByPriceLimit(Integer.parseInt(pageSize), Integer.parseInt(pageNum), new BigDecimal(priceBottom), new BigDecimal(priceTop));
+        Page page = pageService.getPage(pageNum, pageSize, bookList);
+
+        session.setAttribute("bookList", bookList);
+        session.setAttribute("page", page);
+        return "thymeleaf:index";
+
     }
 
     public String toOrder(String pageNum, HttpSession session) {
-        try {
-            TransactionUtils.beginTransaction();
-            User user = (User) session.getAttribute("user");
-            if (pageNum == null) {
-                pageNum = "1";
-            }
-            String pageSize = session.getServletContext().getInitParameter("pageSize");
-            if (pageSize == null) {
-                pageSize = "15";
-            }
 
-            List<Order> orderList = orderService.getOrderByUserAndLimit(user, Integer.parseInt(pageSize), Integer.parseInt(pageNum));
-            Page page = pageService.getPage(pageNum, pageSize, orderList);
-
-            session.setAttribute("orderPage", page);
-            session.setAttribute("orderList", orderList);
-            return "thymeleaf:order/order";
-        } catch (Exception e) {
-            TransactionUtils.rollback();
-            throw new RuntimeException(e);
-        } finally {
-            TransactionUtils.commit();
+        User user = (User) session.getAttribute("user");
+        if (pageNum == null) {
+            pageNum = "1";
         }
+        String pageSize = session.getServletContext().getInitParameter("pageSize");
+        if (pageSize == null) {
+            pageSize = "15";
+        }
+
+        List<Order> orderList = orderService.getOrderByUserAndLimit(user, Integer.parseInt(pageSize), Integer.parseInt(pageNum));
+        Page page = pageService.getPage(pageNum, pageSize, orderList);
+
+        session.setAttribute("orderPage", page);
+        session.setAttribute("orderList", orderList);
+        return "thymeleaf:order/order";
+
     }
 
+    public String toManager() {
+        return "thymeleaf:manager/manager";
+    }
+
+    public String toBookManager() {
+        return "thymeleaf:manager/book_manager";
+    }
+
+    public String toOrderManager(HttpSession session) {
+
+        List<Order> allOrderList = orderService.getAllOrder();
+        session.setAttribute("allOrderList", allOrderList);
+        return "thymeleaf:manager/order_manager";
+
+    }
 }

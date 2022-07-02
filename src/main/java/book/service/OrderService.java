@@ -67,4 +67,8 @@ public class OrderService {
         OrderMapper mapper = TransactionUtils.getMapper(OrderMapper.class);
         return mapper.selectByUserIdAndLimit(user.getId(), (pageNum - 1) * pageSize, pageSize);
     }
+
+    public List<Order> getAllOrder() {
+        return TransactionUtils.getMapper(OrderMapper.class).selectAll();
+    }
 }
