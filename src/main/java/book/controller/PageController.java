@@ -10,6 +10,7 @@ import book.utils.TransactionUtils;
 
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
+import java.util.Enumeration;
 import java.util.List;
 
 /**
@@ -31,7 +32,15 @@ public class PageController {
 
     public String toIndex(String isExit, String pageNum, HttpSession session) {
         if ("true".equals(isExit)) {
-            session.setAttribute("user", null);
+            // 置空所有对象
+            Enumeration<String> attributeNames = session.getAttributeNames();
+            while (attributeNames.hasMoreElements()) {
+                String attributeName = attributeNames.nextElement();
+                if ("bookList".equals(attributeName) || "page".equals(attributeName)) {
+                    continue;
+                }
+                session.setAttribute(attributeName, null);
+            }
         }
         return filterByPrice(pageNum, null, null, session);
     }
@@ -45,14 +54,10 @@ public class PageController {
     }
 
     public String toCartItem(HttpSession session) {
-        Object userObj = session.getAttribute("user");
-        if (userObj == null) {
-            // 未登录
-            return toLogin();
-        }
+
         try {
             TransactionUtils.beginTransaction();
-            User user = (User) userObj;
+            User user = (User) session.getAttribute("user");
 
             // 更新数据
             List<CartItem> cartItemList = cartItemService.getAllCartItemsByUser(user);
@@ -93,12 +98,9 @@ public class PageController {
     }
 
     public String toOrder(String pageNum, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            return "thymeleaf:index";
-        }
         try {
             TransactionUtils.beginTransaction();
+            User user = (User) session.getAttribute("user");
             if (pageNum == null) {
                 pageNum = "1";
             }

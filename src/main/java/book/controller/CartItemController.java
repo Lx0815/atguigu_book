@@ -5,15 +5,9 @@ import book.service.BookService;
 import book.service.CartItemService;
 import book.service.OrderItemService;
 import book.service.OrderService;
-import book.utils.LoggerUtils;
 import book.utils.TransactionUtils;
-//import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.servlet.http.HttpSession;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Objects;
 
 /**
  * @author: Ding
@@ -39,15 +33,10 @@ public class CartItemController {
      * @return 重新渲染主页
      */
     public String indexAddCart(String bookId, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            // 说明用户未登录
-            return "thymeleaf:user/login";
-        }
 
         try {
             TransactionUtils.beginTransaction();
-
+            User user = (User) session.getAttribute("user");
             cartItemService.addOneCartItem(bookId, user);
 
             return "thymeleaf:index";
@@ -68,7 +57,7 @@ public class CartItemController {
      * @return 视图处理
      */
     public String updateCartItem(String id, String newBuyCount, String bookId, HttpSession session) {
-        if (newBuyCount == null || bookId == null || session.getAttribute("user") == null) {
+        if (newBuyCount == null || bookId == null) {
             return "thymeleaf:user/login";
         }
 

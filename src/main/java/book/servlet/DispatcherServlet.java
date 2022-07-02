@@ -41,8 +41,6 @@ public class DispatcherServlet extends ViewBaseServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding(StandardCharsets.UTF_8.toString());
-        response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
 
         String operate = request.getParameter("operate");
         if (operate == null || "".equals(operate)) {

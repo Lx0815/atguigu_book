@@ -5,7 +5,7 @@
     <resultMap id="bookMap" type="book">
         <result property="bookCount" column="book_count"/>
         <result property="bookName" column="book_name"/>
-        <result property="bookImg" column="bookImg"/>
+        <result property="bookImg" column="book_img"/>
         <result property="saleCount" column="sale_count"/>
         <result property="bookStatus" column="book_status"/>
     </resultMap>

@@ -152,7 +152,7 @@
 
                 <div th:if="${session.bookList.size()} > 0" class="list-content">
                     <div th:each="book : ${session.bookList}" th:class="list-item" th:object="${book}">
-                        <img th:src="@{/static/uploads/*{bookImg}}">
+                        <img th:src="@{|/static/uploads/*{bookImg}|}">
                         <p th:text="|书名:*{bookName}|"></p>
                         <p th:text="|作者:*{author}|"></p>
                         <p th:text="|价格:*{price}|"></p>

@@ -114,7 +114,7 @@
                     <input type="hidden" th:value="${cartItem.id}">
                 </td>
                 <td>
-                    <img th:src="${cartItem.book.bookImg}">
+                    <img th:src="@{|/static/uploads/${cartItem.book.bookImg}|}">
                 </td>
                 <td th:text="${cartItem.book.bookName}"></td>
                 <td>
