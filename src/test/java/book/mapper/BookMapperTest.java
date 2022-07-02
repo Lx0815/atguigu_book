@@ -29,7 +29,6 @@ class BookMapperTest {
         bookList.forEach(System.out::println);
     }
 
-
     @Test
     void selectById() {
     }
