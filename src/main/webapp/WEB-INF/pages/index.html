@@ -151,16 +151,16 @@
                 <iframe hidden="hidden" name="iframe"></iframe>
 
                 <div th:if="${session.bookList.size()} > 0" class="list-content">
-                    <div th:each="book : ${session.bookList}" th:class="list-item" th:object="${book}">
-                        <img th:src="@{|/static/uploads/*{bookImg}|}">
-                        <p th:text="|书名:*{bookName}|"></p>
-                        <p th:text="|作者:*{author}|"></p>
-                        <p th:text="|价格:*{price}|"></p>
-                        <p th:text="|销量:*{saleCount}|"></p>
-                        <p th:text="|库存:*{bookCount}|"></p>
+                    <div th:each="bookObj : ${session.bookList}" th:class="list-item">
+                        <img th:src="@{|/static/uploads/${bookObj.bookImg}|}">
+                        <p th:text="|书名:${bookObj.bookName}|"></p>
+                        <p th:text="|作者:${bookObj.author}|"></p>
+                        <p th:text="|价格:${bookObj.price}|"></p>
+                        <p th:text="|销量:${bookObj.saleCount}|"></p>
+                        <p th:text="|库存:${bookObj.bookCount}|"></p>
                         <form method="post" th:action="@{/cartItem.do}">
                             <input hidden="hidden" name="operate" value="indexAddCart">
-                            <input hidden="hidden" name="bookId" th:value="*{id}">
+                            <input hidden="hidden" name="bookId" th:value="${bookObj.id}">
                             <button class="add-cart-btn">加入购物车</button>
                             <input hidden="hidden" type="submit">
                         </form>

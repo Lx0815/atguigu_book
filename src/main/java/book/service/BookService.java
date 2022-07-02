@@ -15,48 +15,60 @@ import java.util.List;
  */
 
 public class BookService {
+    
+    private BookMapper mapper = TransactionUtils.getMapper(BookMapper.class);
 
     /**
      *
      * @return 返回所有图书
      */
     public List<Book> selectAll() {
-        BookMapper bookMapper = TransactionUtils.getMapper(BookMapper.class);
-        return bookMapper.selectAll();
+        
+        return mapper.selectAll();
     }
 
     public List<Book> selectAllByLimit(int pageSize, int pageNum) {
-        BookMapper mapper = TransactionUtils.getMapper(BookMapper.class);
+        
         return mapper.selectByLimit((pageNum - 1) * pageSize, pageSize);
     }
 
     public Integer selectAllCount() {
-        BookMapper mapper = TransactionUtils.getMapper(BookMapper.class);
+        
         return mapper.selectAllCount();
     }
 
     public Book selectById(int bookId) {
-        BookMapper mapper = TransactionUtils.getMapper(BookMapper.class);
+        
         return mapper.selectById(bookId);
     }
 
     public BigDecimal selectPriceById(int id) {
-        BookMapper mapper = TransactionUtils.getMapper(BookMapper.class);
+        
         return mapper.selectPriceById(id);
     }
 
     public Integer selectRemainingStockByCartItemId(Integer cartItemId) {
-        BookMapper mapper = TransactionUtils.getMapper(BookMapper.class);
+        
         return mapper.selectRemainingStockByCartItemId(cartItemId);
     }
 
     public void updateById(Book book) {
-        BookMapper mapper = TransactionUtils.getMapper(BookMapper.class);
+        
         mapper.updateById(book);
     }
 
     public List<Book> selectByPriceLimit(Integer pageSize, Integer pageNum, BigDecimal priceBottom, BigDecimal priceTop) {
-        BookMapper mapper = TransactionUtils.getMapper(BookMapper.class);
+        
         return mapper.selectByPriceLimit((pageNum - 1) * pageSize, pageSize, priceBottom, priceTop);
+    }
+
+    public void deleteOne(int bookId) {
+        
+        mapper.deleteById(bookId);
+    }
+
+    public void insertOne(Book newBook) {
+        
+        mapper.insertOne(newBook);
     }
 }

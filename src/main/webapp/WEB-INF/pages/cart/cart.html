@@ -108,32 +108,32 @@
                 <th>金额</th>
                 <th>操作</th>
             </tr>
-            <tr th:each="cartItem : ${session.cartItemList}">
+            <tr th:each="cartItemObj : ${session.cartItemList}">
                 <td>
                     <input type="checkbox" class="cart-item-checkbox">
-                    <input type="hidden" th:value="${cartItem.id}">
+                    <input type="hidden" th:value="${cartItemObj.id}">
                 </td>
                 <td>
-                    <img th:src="@{|/static/uploads/${cartItem.book.bookImg}|}">
+                    <img th:src="@{|/static/uploads/${cartItemObj.book.bookImg}|}">
                 </td>
-                <td th:text="${cartItem.book.bookName}"></td>
+                <td th:text="${cartItemObj.book.bookName}"></td>
                 <td>
 
                     <form class="buy-count-form" method="post" th:action="@{/cartItem.do}">
                         <!--此处顺序谨慎修改，若要修改，请一同修改 jQuery 选择器-->
                         <input type="hidden" name="operate" value="updateCartItem">
-                        <input type="hidden" name="bookId" th:value="${cartItem.book.id}">
-                        <input type="hidden" name="id" th:value="${cartItem.id}">
+                        <input type="hidden" name="bookId" th:value="${cartItemObj.book.id}">
+                        <input type="hidden" name="id" th:value="${cartItemObj.id}">
                         <input type="button" value="-" class="count-minus"/>
-                        <input class="count-num" type="text" name="newBuyCount" th:value="${cartItem.buyCount}"/>
+                        <input class="count-num" type="text" name="newBuyCount" th:value="${cartItemObj.buyCount}"/>
                         <input type="button" value="+" class="count-add"/>
-                        <input class="count-old-num" type="hidden" th:value="${cartItem.buyCount}">
+                        <input class="count-old-num" type="hidden" th:value="${cartItemObj.buyCount}">
                         <input hidden="hidden" type="submit" value="提交表单submit">
                     </form>
 
                 </td>
-                <td th:text="${cartItem.book.price}"></td>
-                <td class="cart-all-price" th:text="${cartItem.allPrice}"></td>
+                <td th:text="${cartItemObj.book.price}"></td>
+                <td class="cart-all-price" th:text="${cartItemObj.allPrice}"></td>
             </tr>
         </table>
         <div class="footer">

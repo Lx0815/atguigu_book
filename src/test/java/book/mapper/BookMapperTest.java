@@ -38,4 +38,9 @@ class BookMapperTest {
         BookMapper mapper = TransactionUtils.getMapper(BookMapper.class);
         System.out.println(mapper.selectByLimit(0, 15));
     }
+
+    @Test
+    void updateById() {
+
+    }
 }

@@ -9,36 +9,43 @@
         <result property="saleCount" column="sale_count"/>
         <result property="bookStatus" column="book_status"/>
     </resultMap>
+    <insert id="insertOne">
+        INSERT INTO bookdb.t_book (book_count, book_name, price, book_img, author, sale_count, book_status)
+                VALUES (#{bookCount}, #{bookName}, #{price}, #{bookImg}, #{author}, #{saleCount}, #{bookStatus})
+    </insert>
 
     <update id="updateById">
         UPDATE bookdb.t_book
-        <set>
+
+        <trim prefix="set " suffix=" " suffixOverrides=",">
             <if test="bookCount != null and bookCount != ''">
                 book_count = #{bookCount} ,
             </if>
-            <if test="bookName != null and bookCount != ''">
+            <if test="bookName != null and bookName != ''">
                 book_name = #{bookName} ,
             </if>
             <if test="price != null">
-                price = #{price}
+                price = #{price} ,
             </if>
             <if test="bookImg != null and bookImg != ''">
-                book_img = #{bookImg}
+                book_img = #{bookImg} ,
             </if>
             <if test="author != null and author != ''">
-                author = #{author}
+                author = #{author} ,
             </if>
             <if test="saleCount != null">
-                sale_count = #{saleCount}
+                sale_count = #{saleCount} ,
             </if>
             <if test="bookStatus != null">
-                book_status = #{bookStatus}
+                book_status = #{bookStatus} ,
             </if>
-        </set>
-        <where>
-            id = #{id}
-        </where>
+        </trim>
+        WHERE id = #{id}
     </update>
+    <delete id="deleteById">
+        DELETE FROM bookdb.t_book
+        WHERE id = #{bookId}
+    </delete>
 
     <select id="selectAll" resultMap="bookMap">
         SELECT id, book_count, book_name, price, book_img, author, sale_count, book_status

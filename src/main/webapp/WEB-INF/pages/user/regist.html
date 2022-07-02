@@ -18,7 +18,6 @@
         $(function () {
 
             // 用户名校验
-            let usernameMark = false;
             let $usernameInput = $(".errMess:eq(0)").prev().children(":text");
             $usernameInput.change(function () {
                 // let usernameReg = new RegExp("^(\\d|\\w){6, 16}$");
@@ -37,7 +36,6 @@
             // 密码校验
             let password1;
             let password2;
-            let passwordMark = false;
             let $passwordInput1 = $(".errMess:eq(1)").prev().children(":password");
             $passwordInput1.change(function () {
                 // alert("val = " + $(this).val());
@@ -52,17 +50,16 @@
             $passwordInput2.change(function () {
                 // alert("val = " + $(this).val());
                 if ($(this).val().length >= 8 && password1 === password2) {
-                    passwordMark = true;
+
                     $(".errMess:eq(2)").css("visibility", "hidden")
                 } else {
-                    passwordMark = false;
+
                     // alert("val = " + $(this).val());
                     $(".errMess:eq(2)").css("visibility", "visible")
                 }
             })
 
             // 邮箱校验
-            let emailMark = false;
             let $emailInput = $(".errMess:eq(3)").prev().children(":text");
             $emailInput.change(function () {
                 // let emailReg = new RegExp("((\\d+)|(\\w+))@((\\d+)|(\\w+))\\.((\\d+)|(\\w+))");
@@ -71,10 +68,9 @@
                 let $emailErr = $emailInput.parent().next();
                 if (emailReg.test($(this).val())) {
                     $(".errMess:eq(3)").css("visibility", "hidden")
-                    emailMark = true;
+
                 } else {
                     // alert("val = " + $(this).val());
-                    emailMark = false;
                     $(".errMess:eq(3)").css("visibility", "visible")
                 }
             })

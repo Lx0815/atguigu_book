@@ -26,4 +26,8 @@ public interface BookMapper {
                                   @Param("pageSize") Integer pageSize,
                                   @Param("priceBottom") BigDecimal priceBottom,
                                   @Param("priceTop") BigDecimal priceTop);
+
+    void deleteById(@Param("bookId") int bookId);
+
+    void insertOne(Book newBook);
 }

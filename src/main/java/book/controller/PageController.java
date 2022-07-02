@@ -71,7 +71,6 @@ public class PageController {
         if (priceBottom == null) priceBottom = "0";
         if (pageNum == null) pageNum = "1";
         if (priceTop == null) priceTop = "99999999999999";
-
         String pageSize = session.getServletContext().getInitParameter("pageSize");
 
         List<Book> bookList = bookService.selectByPriceLimit(Integer.parseInt(pageSize), Integer.parseInt(pageNum), new BigDecimal(priceBottom), new BigDecimal(priceTop));
@@ -107,7 +106,9 @@ public class PageController {
         return "thymeleaf:manager/manager";
     }
 
-    public String toBookManager() {
+    public String toBookManager(HttpSession session) {
+        List<Book> bookListManager = bookService.selectAll();
+        session.setAttribute("bookListManager", bookListManager);
         return "thymeleaf:manager/book_manager";
     }
 
@@ -117,5 +118,13 @@ public class PageController {
         session.setAttribute("allOrderList", allOrderList);
         return "thymeleaf:manager/order_manager";
 
+    }
+
+    public String toBookEdit(String editBookId, HttpSession session) {
+        if (editBookId != null) {
+            Book editBook = bookService.selectById(Integer.parseInt(editBookId));
+            session.setAttribute("editBook", editBook);
+        }
+        return "thymeleaf:manager/book_edit";
     }
 }
