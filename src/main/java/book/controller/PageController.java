@@ -1,11 +1,9 @@
 package book.controller;
 
-import book.pojo.Book;
-import book.pojo.CartItem;
-import book.pojo.Page;
-import book.pojo.User;
+import book.pojo.*;
 import book.service.BookService;
 import book.service.CartItemService;
+import book.service.OrderService;
 import book.service.PageService;
 import book.utils.LoggerUtils;
 import book.utils.TransactionUtils;
@@ -29,37 +27,13 @@ public class PageController {
 
     private PageService pageService;
 
+    private OrderService orderService;
+
     public String toIndex(String isExit, String pageNum, HttpSession session) {
         if ("true".equals(isExit)) {
             session.setAttribute("user", null);
         }
         return filterByPrice(pageNum, null, null, session);
-//        try {
-//            TransactionUtils.beginTransaction();
-//            if ("true".equals(isExit)) {
-//                session.setAttribute("user", null);
-//            }
-//
-//            // 获取每一页显示的图书数量
-//            String pageSize = session.getServletContext().getInitParameter("pageSize");
-//            Page page = pageService.getPage(pageNum, pageSize, null);
-//
-//            if (page.getMaxPageNum() < page.getPageNum() || 1 > page.getPageNum()) {
-//                LoggerUtils.logInfo("访问的页码超出范围，将不进行数据更新");
-//                return "thymeleaf:index";
-//            }
-//
-//            // 更新数据
-//            List<Book> bookList = bookService.selectAllByLimit(page.getPageSize(), page.getPageNum());
-//            session.setAttribute("page", page);
-//            session.setAttribute("bookList", bookList);
-//            return "thymeleaf:index";
-//        } catch (Exception e) {
-//            TransactionUtils.rollback();
-//            throw new RuntimeException(e);
-//        } finally {
-//            TransactionUtils.commit();
-//        }
     }
 
     public String toLogin() {
@@ -116,7 +90,35 @@ public class PageController {
         } finally {
             TransactionUtils.commit();
         }
+    }
 
+    public String toOrder(String pageNum, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            return "thymeleaf:index";
+        }
+        try {
+            TransactionUtils.beginTransaction();
+            if (pageNum == null) {
+                pageNum = "1";
+            }
+            String pageSize = session.getServletContext().getInitParameter("pageSize");
+            if (pageSize == null) {
+                pageSize = "15";
+            }
+
+            List<Order> orderList = orderService.getOrderByUserAndLimit(user, Integer.parseInt(pageSize), Integer.parseInt(pageNum));
+            Page page = pageService.getPage(pageNum, pageSize, orderList);
+
+            session.setAttribute("orderPage", page);
+            session.setAttribute("orderList", orderList);
+            return "thymeleaf:order/order";
+        } catch (Exception e) {
+            TransactionUtils.rollback();
+            throw new RuntimeException(e);
+        } finally {
+            TransactionUtils.commit();
+        }
     }
 
 }

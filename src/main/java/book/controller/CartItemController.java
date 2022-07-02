@@ -92,9 +92,9 @@ public class CartItemController {
         try {
             TransactionUtils.beginTransaction();
 
-            Order order = orderService.getPayOrder(cartItemIds, allPrice, session);
+            Order order = orderService.createOrderByCartItem(cartItemIds, allPrice, session);
 
-            session.setAttribute("order", order);
+            session.setAttribute("payOrder", order);
 
             return "thymeleaf:cart/checkout";
         } catch (Exception e) {

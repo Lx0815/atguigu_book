@@ -10,7 +10,7 @@ import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Objects;
+import java.util.List;
 
 /**
  * @author: Ding
@@ -32,7 +32,7 @@ public class OrderService {
         mapper.insertOne(order);
     }
 
-    public Order getPayOrder(String cartItemIds, String allPrice, HttpSession session) {
+    public Order createOrderByCartItem(String cartItemIds, String allPrice, HttpSession session) {
         // 处理 cartItemIds
         String[] cartItemStrArr = cartItemIds.split(",");
         LoggerUtils.logInfo("cartItemStrArr : " + Arrays.toString(cartItemStrArr));
@@ -42,38 +42,10 @@ public class OrderService {
                 new BigDecimal(allPrice), 1);
         this.insertOne(order);
 
-
         // 生成订单详情
-        OrderItem[] orderItems = new OrderItem[cartItemStrArr.length];
-        CartItem cartItem;
-        Book book;
-        for (int i = 0; i < cartItemStrArr.length; i++) {
-            // 跳过无效 id
-            if ("".equals(cartItemStrArr[i])) continue;
-            // 获取单个地购物车项
-            cartItem = cartItemService.getCartItemById(Integer.parseInt(cartItemStrArr[i]));
-            // 校验库存是否充足
-            Integer remainingStock = bookService.selectRemainingStockByCartItemId(cartItem.getId());
-            if (remainingStock < 0) {
-                // 可以细化到具体是什么商品库存不足。此过程或许需要优化返回值为 枚举类型，或普通的对象，总之得封装返回值
-                return null;
-            }
-            // 更新库存
-            book = cartItem.getBook();
-            book.setId(cartItem.getBook().getId());
-            book.setBookCount(remainingStock);
-            book.setSaleCount(book.getSaleCount() + cartItem.getBuyCount());
-            book.setBookImg(null);
-            book.setBookName(null);
-            book.setBookStatus(null);
-            book.setAuthor(null);
-            book.setPrice(null);
-            bookService.updateById(book);
+        OrderItem[] orderItems = orderItemService.createOrderItemByArr(cartItemStrArr, order);
+        if (orderItems == null) throw new RuntimeException("订单详情生成失败");
 
-            // 这里只需要 book 的 id，所以无需担心用于更新库存的 book 无法用于新建订单详情
-            orderItems[i] = new OrderItem(book, cartItem.getBuyCount(), order);
-            LoggerUtils.logInfo("orderItem["+ i +"] : " + orderItems[i].toString());
-        }
         // 批量插入
         orderItemService.insertByArr(orderItems);
 
@@ -88,5 +60,11 @@ public class OrderService {
         LoggerUtils.logInfo("cartItemIdsArr : " + Arrays.toString(cartItemIdsArr));
         cartItemService.deleteByIds(cartItemIdsArr);
         return order;
+    }
+
+
+    public List<Order> getOrderByUserAndLimit(User user, Integer pageSize, Integer pageNum) {
+        OrderMapper mapper = TransactionUtils.getMapper(OrderMapper.class);
+        return mapper.selectByUserIdAndLimit(user.getId(), (pageNum - 1) * pageSize, pageSize);
     }
 }

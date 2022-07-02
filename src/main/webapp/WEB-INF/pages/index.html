@@ -21,13 +21,13 @@
             </div>
             <div class="topbar-right">
                 <div th:if="${session.user} == null">
-                    <a th:href="@{/page.do?operate=toLogin}" class="login">登录</a>
-                    <a th:href="@{/page.do?operate=toRegist}" class="register">注册</a>
+                    <a th:href="@{/page.do(operate='toLogin')}" class="login">登录</a>
+                    <a th:href="@{/page.do(operate='toRegist')}" class="register">注册</a>
                 </div>
                 <div th:unless="${session.user == null}">
                     <p th:text="${session.user.username}"></p>
                 </div>
-                <a th:href="@{/page.do?operate=toCartItem}" class="cart iconfont icon-gouwuche">
+                <a th:href="@{/page.do(operate='toCartItem')}" class="cart iconfont icon-gouwuche">
                     购物车
                     <div th:if="${session.cartItemList} != null">
                     <div class="cart-num" th:text="${session.cartItemList.size()}"></div>
@@ -170,17 +170,17 @@
                 <div class="list-footer">
                     <div id="limit-page-front-div">首页</div>
                     <ul>
-                        <li id="limit-page-prepre" th:if="${session.page.pageNum > 2}" th:text="|第${session.page.pageNum - 2}页|"></li>
-                        <li id="limit-page-pre" th:if="${session.page.pageNum > 1}" th:text="|第${session.page.pageNum - 1}页|"></li>
+                        <li th:href="@{/page.do(operate='toIndex',isExit='false',pageNum=${session.page.pageNum - 2})}" th:if="${session.page.pageNum > 2}" th:text="|第${session.page.pageNum - 2}页|"></li>
+                        <li th:href="@{/page.do(operate='toIndex',isExit='false',pageNum=${session.page.pageNum - 1})}" th:if="${session.page.pageNum > 1}" th:text="|第${session.page.pageNum - 1}页|"></li>
                         <li class="active" id="limit-page-now" th:if="${session.page.pageNum != 1}" th:text="|第${session.page.pageNum}页|"></li>
-                        <li id="limit-page-next" th:if="${session.page.pageNum + 1 < session.page.maxPageNum}" th:text="|第${session.page.pageNum + 1}页|"></li>
-                        <li id="limit-page-nextnext" th:if="${session.page.pageNum + 2 < session.page.maxPageNum}" th:text="|第${session.page.pageNum + 2}页|"></li>
+                        <li th:href="@{/page.do(operate='toIndex',isExit='false',pageNum=${session.page.pageNum + 1})}" th:if="${session.page.pageNum + 1 < session.page.maxPageNum}" th:text="|第${session.page.pageNum + 1}页|"></li>
+                        <li th:href="@{/page.do(operate='toIndex',isExit='false',pageNum=${session.page.pageNum + 2})}" th:if="${session.page.pageNum + 2 < session.page.maxPageNum}" th:text="|第${session.page.pageNum + 2}页|"></li>
                     </ul>
                     <div id="limit-page-last-div" th:if="${session.page.maxPageNum > 1}">末页</div>
                     <span id="all-page-span" th:text="|共${session.page.maxPageNum}页|"></span>
                     <span id="all-count-span" th:text="|${session.page.allCount}条记录|"></span>
                     <span>到第</span>
-                    <form th:action="@{/page.do?operate=toIndex}" method="post">
+                    <form th:action="@{/page.do(operate='toIndex')}" method="post">
                         <input name="pageNum" type="text">
                         <span>页</span>
                         <input type="submit" value="确定">
@@ -363,22 +363,26 @@
                 }
             })
         })
+
+        // 根据价格进行筛选
+        $("filter-select-btn").click(function () {
+            let priceBottom = $(this).siblings().eq(1).val();
+            let priceTop = $(this).siblings().eq(3).val();
+            let exp = new RegExp("^\\d+$");
+            if (exp.test(priceBottom)
+                && exp.test(priceTop)
+                && (priceBottom - 0) < (priceTop - 0)
+                && (priceBottom - 0) > 0) {
+
+
+                $(this).parent().parent().submit();
+            }
+        });
+
     })
 
-    // 根据价格进行筛选
-    $("filter-select-btn").click(function () {
-        let priceBottom = $(this).siblings().eq(1).val();
-        let priceTop = $(this).siblings().eq(3).val();
-        let exp = new RegExp("^\\d+$");
-        if (exp.test(priceBottom)
-            && exp.test(priceTop)
-            && (priceBottom - 0) < (priceTop - 0)
-            && (priceBottom - 0) > 0) {
 
 
-            $(this).parent().parent().submit();
-        }
-    })
 </script>
 </body>
 </html>

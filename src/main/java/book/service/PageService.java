@@ -17,7 +17,7 @@ public class PageService {
 
     private BookService bookService;
 
-    public Page getPage(String pageNum, String pageSize, List<Book> bookList) {
+    public Page getPage(String pageNum, String pageSize, List<?> list) {
         if (pageSize == null) {
             pageSize = "15";
             LoggerUtils.logInfo("web.xml 未指定 pageSize，已赋默认值 15");
@@ -32,10 +32,10 @@ public class PageService {
         page.setPageSize(Integer.parseInt(pageSize));
 
         Integer allCount;
-        if (bookList == null) {
+        if (list == null) {
             allCount = bookService.selectAllCount();
         } else {
-            allCount = bookList.size();
+            allCount = list.size();
         }
         page.setAllCount(allCount);
         page.setMaxPageNum(allCount / page.getPageSize() + 1);

@@ -25,7 +25,7 @@ public class Order {
     /**
      * 订单创建时间
      */
-    private LocalDateTime orderDatetime;
+    private LocalDateTime orderDateTime;
 
     /**
      * 订单所属用户
@@ -49,9 +49,9 @@ public class Order {
 
     public Order() {}
 
-    public Order(String orderNumber, LocalDateTime orderDatetime, User orderUser, BigDecimal orderMoney, Integer orderStatus) {
+    public Order(String orderNumber, LocalDateTime orderDateTime, User orderUser, BigDecimal orderMoney, Integer orderStatus) {
         this.orderNumber = orderNumber;
-        this.orderDatetime = orderDatetime;
+        this.orderDateTime = orderDateTime;
         this.orderUser = orderUser;
         this.orderMoney = orderMoney;
         this.orderStatus = orderStatus;
@@ -73,12 +73,12 @@ public class Order {
         this.orderNumber = orderNumber;
     }
 
-    public LocalDateTime getOrderDatetime() {
-        return orderDatetime;
+    public LocalDateTime getOrderDateTime() {
+        return orderDateTime;
     }
 
-    public void setOrderDatetime(LocalDateTime orderDatetime) {
-        this.orderDatetime = orderDatetime;
+    public void setOrderDateTime(LocalDateTime orderDateTime) {
+        this.orderDateTime = orderDateTime;
     }
 
     public User getOrderUser() {
@@ -118,7 +118,7 @@ public class Order {
         return "Order{" +
                 "id=" + id +
                 ", orderNumber='" + orderNumber + '\'' +
-                ", orderDatetime=" + orderDatetime +
+                ", orderDateTime=" + orderDateTime +
                 ", orderUser=" + orderUser +
                 ", orderMoney=" + orderMoney +
                 ", orderStatus=" + orderStatus +
