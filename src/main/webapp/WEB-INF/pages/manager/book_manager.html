@@ -13,9 +13,9 @@
 <div class="header">
     <div class="w">
         <div class="header-left">
-            <a href="../index.html">
-                <img th:src="@{/static/img/logo.gif}" alt=""
-                /></a>
+            <a th:href="@{page.do(operate='toIndex',isExit='false')}">
+                <img th:src="@{/static/img/logo.gif}" alt=""/>
+            </a>
             <h1>图书管理系统</h1>
         </div>
         <div class="header-right">
@@ -56,41 +56,26 @@
                     <a th:href="@{/page.do(operate='toBookEdit',editBookId=${bookObj.id})}">修改</a><a th:href="@{/book.do(operate='deleteOne',deleteBookId=${bookObj.id})}" class="del">删除</a>
                 </td>
             </tr>
-            <tr>
-                <td>
-                    <img th:src="@{/static/uploads/huozhe.jpg}" alt=""/>
-                </td>
-                <td>活着</td>
-                <td>
-                    100.00
-                </td>
-                <td>余华</td>
-                <td>200</td>
-                <td>400</td>
-                <td>
-                    <a href="book_edit.html">修改</a><a href="" class="del">删除</a>
-                </td>
-            </tr>
             </tbody>
         </table>
-        <div class="footer">
-            <div class="footer-right">
-                <div>首页</div>
-                <div>上一页</div>
-                <ul>
-                    <li class="active">1</li>
-                    <li>2</li>
-                    <li>3</li>
-                </ul>
-                <div>下一页</div>
-                <div>末页</div>
-                <span>共10页</span>
-                <span>30条记录</span>
-                <span>到第</span>
-                <input type="text"/>
-                <span>页</span>
-                <button>确定</button>
-            </div>
+<!--        <div class="footer">-->
+<!--            <div class="footer-right">-->
+<!--                <div>首页</div>-->
+<!--                <div>上一页</div>-->
+<!--                <ul>-->
+<!--                    <li class="active">1</li>-->
+<!--                    <li>2</li>-->
+<!--                    <li>3</li>-->
+<!--                </ul>-->
+<!--                <div>下一页</div>-->
+<!--                <div>末页</div>-->
+<!--                <span>共10页</span>-->
+<!--                <span>30条记录</span>-->
+<!--                <span>到第</span>-->
+<!--                <input type="text"/>-->
+<!--                <span>页</span>-->
+<!--                <button>确定</button>-->
+<!--            </div>-->
         </div>
     </div>
 </div>
