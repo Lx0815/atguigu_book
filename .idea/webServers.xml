@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="43c64d20-5162-4818-b68c-cb4858a7cfcd" name="tencent" url="http://43.142.113.254:22">
+        <fileTransfer rootFolder="/usr/tomcat8.5.81/apache-tomcat-8.5.81" accessType="SFTP" host="43.142.113.254" port="22" sshConfigId="16fd518c-bdda-4f76-9067-ea79d4025e61" sshConfig="root@43.142.113.254:22 password">
+          <advancedOptions>
+            <advancedOptions controlEncoding="UTF-8" dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

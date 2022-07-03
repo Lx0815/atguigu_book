@@ -68,9 +68,9 @@ public class PageController {
     }
 
     public String filterByPrice(String pageNum, String priceBottom, String priceTop, HttpSession session) {
-        if (priceBottom == null) priceBottom = "0";
-        if (pageNum == null) pageNum = "1";
-        if (priceTop == null) priceTop = "99999999999999";
+        if (priceBottom == null || "".equals(priceBottom)) priceBottom = "0";
+        if (pageNum == null || "".equals(pageNum)) pageNum = "1";
+        if (priceTop == null || "".equals(priceTop)) priceTop = "9999999999999";
         String pageSize = session.getServletContext().getInitParameter("pageSize");
 
         List<Book> bookList = bookService.selectByPriceLimit(Integer.parseInt(pageSize), Integer.parseInt(pageNum), new BigDecimal(priceBottom), new BigDecimal(priceTop));

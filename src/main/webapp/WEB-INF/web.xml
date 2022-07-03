@@ -21,6 +21,17 @@
 <!--        <param-value>applicationContext.xml</param-value>-->
 <!--    </context-param>-->
 
+
+    <!--kaptcha 验证码的 Servlet-->
+    <servlet-mapping>
+        <servlet-name>kaptcha</servlet-name>
+        <url-pattern>/kaptcha.jpg</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>kaptcha</servlet-name>
+        <servlet-class>com.google.code.kaptcha.servlet.KaptchaServlet</servlet-class>
+    </servlet>
+
     <!-- mvc对静态资源放行 -->
     <servlet-mapping>
         <servlet-name>default</servlet-name>

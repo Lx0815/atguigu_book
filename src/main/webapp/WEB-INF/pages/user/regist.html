@@ -81,13 +81,19 @@
                 //     $("#register-form").submit();
                 // }
                 let isSubmit = true;
+                // 用户信息验证
                 $(".errMess").each(function () {
                     let css = $(this).css("visibility");
                     if (css === "visible") {
                         isSubmit = false;
                     }
                 })
-                if (isSubmit) {
+                // 验证码验证
+                // let kaptchaVal = $(":text:last").val();
+                // let trueKaptcha = $(":text:last").next().val();
+                // alert(kaptchaVal)
+                // alert(trueKaptcha)
+                if (isSubmit/* && kaptchaVal === trueKaptcha*/) {
                     $("#register-form").submit();
                 }
                 return false;
@@ -140,8 +146,9 @@
                 <div>
                     <label>验证码:</label>
                     <div class="verify">
-                        <input type="text" placeholder=""/>
-                        <img th:src="@{/static/img/code.bmp}" alt=""/>
+                        <input type="text" name="kaptcha"/>
+<!--                        <input type="hidden" th:value="${#session.getAttribute('KAPTCHA_SESSION_KEY')}">-->
+                        <img th:src="@{/kaptcha.jpg}" alt=""/>
                     </div>
                 </div>
                 <span class="errMess">请输入正确的验证码</span>

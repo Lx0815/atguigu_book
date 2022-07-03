@@ -4,6 +4,7 @@ import book.pojo.User;
 import book.service.CartItemService;
 import book.service.UserService;
 import book.utils.LoggerUtils;
+import com.google.code.kaptcha.Constants;
 
 import javax.servlet.http.HttpSession;
 
@@ -54,11 +55,19 @@ public class UserController {
     }
 
 
-    public String register(String username, String password, String email, HttpSession session) {
-        if (username == null || password == null || email == null) {
+    public String register(String kaptcha, String username, String password, String email, HttpSession session) {
+        if (username == null || password == null || email == null || kaptcha == null
+            || "".equals(username) || "".equals(password) || "".equals(email) || "".equals(kaptcha)) {
             return "thymeleaf:user/regist";
         }
-
+        Object kaptchaKeyObj = session.getAttribute(Constants.KAPTCHA_SESSION_KEY);
+        if (kaptchaKeyObj == null) {
+            return "thymeleaf:user/regist";
+        }
+        String kaptchaKey = (String) kaptchaKeyObj;
+        if (! kaptchaKey.equals(kaptcha)) {
+            return "thymeleaf:user/regist";
+        }
 
         User user = userService.register(username, password, email);
         session.setAttribute("newUser", user);
