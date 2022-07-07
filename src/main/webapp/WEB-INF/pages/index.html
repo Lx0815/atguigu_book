@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>书城首页</title>
+    <link rel="stylesheet" th:href="@{/static/css/minireset.css}"/>
+    <link rel="stylesheet" th:href="@{/static/css/common.css}"/>
+    <link rel="stylesheet" th:href="@{/static/css/iconfont.css}"/>
+    <link rel="stylesheet" th:href="@{/static/css/index.css}"/>
+    <link rel="stylesheet" th:href="@{/static/css/swiper.min.css}"/>
+</head>
+<body>
+<div id="app">
+    <div class="topbar">
+        <div class="w">
+            <div class="topbar-left">
+                <i>送至:</i>
+                <i>北京</i>
+                <i class="iconfont icon-ai-arrow-down"></i>
+            </div>
+            <div class="topbar-right">
+                <div th:if="${session.user} == null">
+                    <a th:href="@{/page.do(operate='toLogin')}" class="login">登录</a>
+                    <a th:href="@{/page.do(operate='toRegist')}" class="register">注册</a>
+                </div>
+                <div th:unless="${session.user == null}">
+                    <p th:text="${session.user.username}"></p>
+                </div>
+                <a th:href="@{/page.do(operate='toCartItem')}" class="cart iconfont icon-gouwuche">
+                    购物车
+                    <div th:if="${session.cartItemList} != null">
+                    <div class="cart-num" th:text="${session.cartItemList.size()}"></div>
+                    </div>
+                </a>
+                <div th:if="${session.user != null && session.user.role} == 0">
+                    <a th:href="@{/page.do(operate='toManager')}" class="admin">后台管理</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="header w">
+        <a href="#" class="header-logo"></a>
+        <div class="header-nav">
+            <ul>
+                <li><a href="#">java</a></li>
+                <li><a href="#">前端</a></li>
+                <li><a href="#">小说</a></li>
+                <li><a href="#">文学</a></li>
+                <li><a href="#">青春文学</a></li>
+                <li><a href="#">艺术</a></li>
+                <li><a href="#">管理</a></li>
+            </ul>
+        </div>
+        <div class="header-search">
+            <input type="text" placeholder="十万个为什么"/>
+            <button class="iconfont icon-search"></button>
+        </div>
+    </div>
+    <div class="banner w clearfix">
+        <div class="banner-left">
+            <ul>
+                <li>
+                    <a href="">
+                        <span>文学 鉴赏</span>
+                        <i class="iconfont icon-jiantou"></i
+                        ></a>
+                </li>
+                <li>
+                    <a href="">
+                        <span>社科 研究</span>
+                        <i class="iconfont icon-jiantou"></i
+                        ></a>
+                </li>
+                <li>
+                    <a href="">
+                        <span>少儿 培训</span>
+                        <i class="iconfont icon-jiantou"></i
+                        ></a>
+                </li>
+                <li>
+                    <a href="">
+                        <span>艺术 赏析</span>
+                        <i class="iconfont icon-jiantou"></i
+                        ></a>
+                </li>
+                <li>
+                    <a href="">
+                        <span>生活 周边</span>
+                        <i class="iconfont icon-jiantou"></i
+                        ></a>
+                </li>
+                <li>
+                    <a href="">
+                        <span>文教 科技</span>
+                        <i class="iconfont icon-jiantou"></i
+                        ></a>
+                </li>
+                <li>
+                    <a href="">
+                        <span>热销 畅读</span>
+                        <i class="iconfont icon-jiantou"></i
+                        ></a>
+                </li>
+            </ul>
+        </div>
+        <div class="banner-right">
+            <div class="swiper-container">
+                <ul class="swiper-wrapper">
+                    <li class="swiper-slide">
+                        <img th:src="@{/static/uploads/banner4.jpg}" alt="">
+                        <!-- <div class="banner-img"></div> -->
+                    </li>
+                    <li class="swiper-slide">
+                        <img th:src="@{/static/uploads/banner5.jpg}" alt="">
+                        <!-- <div class="banner-img"></div> -->
+                    </li>
+                    <li class="swiper-slide">
+                        <img th:src="@{/static/uploads/banner6.jpg}" alt="">
+                        <!-- <div class="banner-img"></div> -->
+                    </li>
+                </ul>
+                <div class="swiper-button-prev"></div>
+
+                <div class="swiper-button-next"></div>
+
+                <!-- Add Pagination -->
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+    </div>
+    <div class="books-list ">
+        <div class="w">
+            <div class="list">
+                <div class="list-header">
+                    <form method="post" th:action="@{page.do}">
+                        <input type="hidden" name="operate" value="filterByPrice">
+                        <input type="hidden" name="pageNum" value="1">
+                        <div class="title">图书列表</div>
+                        <div class="price-search">
+                            <span>价格:</span>
+                            <input name="priceBottom" type="text">
+                            <span>-元</span>
+                            <input name="priceTop" type="text">
+                            <span>元</span>
+                            <button id="filter-select-btn">查询</button>
+                        </div>
+                    </form>
+                </div>
+
+                <iframe hidden="hidden" name="iframe"></iframe>
+
+                <div th:if="${session.bookList.size()} > 0" class="list-content">
+                    <div th:each="bookObj : ${session.bookList}" th:class="list-item">
+                        <img th:src="@{|/static/uploads/${bookObj.bookImg}|}">
+                        <p th:text="|书名:${bookObj.bookName}|"></p>
+                        <p th:text="|作者:${bookObj.author}|"></p>
+                        <p th:text="|价格:${bookObj.price}|"></p>
+                        <p th:text="|销量:${bookObj.saleCount}|"></p>
+                        <p th:text="|库存:${bookObj.bookCount}|"></p>
+                        <form method="post" th:action="@{/cartItem.do}">
+                            <input hidden="hidden" name="operate" value="indexAddCart">
+                            <input hidden="hidden" name="bookId" th:value="${bookObj.id}">
+                            <button class="add-cart-btn">加入购物车</button>
+                            <input hidden="hidden" type="submit">
+                        </form>
+                    </div>
+
+                </div>
+                <div class="list-footer">
+                    <div id="limit-page-front-div">首页</div>
+                    <ul>
+                        <li th:href="@{/page.do(operate='toIndex',isExit='false',pageNum=${session.page.pageNum - 2})}" th:if="${session.page.pageNum > 2}" th:text="|第${session.page.pageNum - 2}页|"></li>
+                        <li th:href="@{/page.do(operate='toIndex',isExit='false',pageNum=${session.page.pageNum - 1})}" th:if="${session.page.pageNum > 1}" th:text="|第${session.page.pageNum - 1}页|"></li>
+                        <li class="active" id="limit-page-now" th:if="${session.page.pageNum != 1}" th:text="|第${session.page.pageNum}页|"></li>
+                        <li th:href="@{/page.do(operate='toIndex',isExit='false',pageNum=${session.page.pageNum + 1})}" th:if="${session.page.pageNum + 1 < session.page.maxPageNum}" th:text="|第${session.page.pageNum + 1}页|"></li>
+                        <li th:href="@{/page.do(operate='toIndex',isExit='false',pageNum=${session.page.pageNum + 2})}" th:if="${session.page.pageNum + 2 < session.page.maxPageNum}" th:text="|第${session.page.pageNum + 2}页|"></li>
+                    </ul>
+                    <div id="limit-page-last-div" th:if="${session.page.maxPageNum > 1}">末页</div>
+                    <span id="all-page-span" th:text="|共${session.page.maxPageNum}页|"></span>
+                    <span id="all-count-span" th:text="|${session.page.allCount}条记录|"></span>
+                    <span>到第</span>
+                    <form th:action="@{/page.do(operate='toIndex')}" method="post">
+                        <input name="pageNum" type="text">
+                        <span>页</span>
+                        <input type="submit" value="确定">
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="cate w">
+        <div class="list">
+            <a href="" class="list-item">
+                <i class="iconfont icon-java"></i>
+                <span>java</span>
+            </a>
+            <a href="" class="list-item"><i class="iconfont icon-h5"></i>h5</a>
+            <a href="" class="list-item">
+                <i class="iconfont icon-python"></i>python
+            </a>
+            <a href="" class="list-item"><i class="iconfont icon-tianchongxing-"></i>pm</a>
+            <a href="" class="list-item"><i class="iconfont icon-php_elephant"></i>php</a>
+            <a href="" class="list-item"><i class="iconfont icon-go"></i>go</a>
+        </div>
+        <a href="" class="img">
+            <img th:src="@{/static/uploads/cate4.jpg}" alt=""/>
+        </a>
+        <a href="" class="img">
+            <img th:src="@{/static/uploads/cate5.jpg}" alt=""/>
+        </a>
+        <a href="" class="img">
+            <img th:src="@{/static/uploads/cate6.jpg}" alt=""/>
+        </a>
+    </div>
+    <div class="books">
+        <div class="w">
+            <div class="seckill">
+                <div class="seckill-header">
+                    <div class="title">
+                        图书秒杀
+                    </div>
+                    <!-- <i class="iconfont icon-huanyipi"></i> -->　
+                </div>
+                <div class="seckill-content">
+
+                    <a href="" class="tip">
+                        <h5>距离结束还有</h5>
+                        <i class="iconfont icon-shandian"></i>
+                        <div class="downcount">
+                            <span class="time">00</span>
+                            <span class="token">:</span>
+                            <span class="time">00</span>
+                            <span class="token">:</span>
+                            <span class="time">00</span>
+                        </div>
+                    </a>
+
+
+                    <a href="" class="books-sec">
+                        <img th:src="@{/static/uploads/congwanqingdaominguo.jpg}" alt="">
+                        <p>从晚晴到民国</p>
+                        <div>
+                            <span class="cur-price">￥28.9</span>
+                            <span class="pre-price">￥36.5</span>
+                        </div>
+                        <button>立即购买</button>
+                    </a>
+                    <a href="" class="books-sec">
+                        <img th:src="@{/static/uploads/cyuyanrumenjingdian.jpg}" alt="">
+                        <p>c语言入门经典</p>
+                        <div>
+                            <span class="cur-price">￥55.9</span>
+                            <span class="pre-price">￥68.5</span>
+                        </div>
+                        <button>立即购买</button>
+                    </a>
+                    <a href="" class="books-sec">
+                        <img th:src="@{/static/uploads/fusang.jpg}" alt="">
+                        <p>扶桑</p>
+                        <div>
+                            <span class="cur-price">￥30.9</span>
+                            <span class="pre-price">￥47.5</span>
+                        </div>
+                        <button>立即购买</button>
+                    </a>
+                    <a href="" class="books-sec">
+                        <img th:src="@{/static/uploads/geihaizideshi.jpg}" alt="">
+                        <p>给孩子的诗</p>
+                        <div>
+                            <span class="cur-price">￥18.9</span>
+                            <span class="pre-price">￥25.5</span>
+                        </div>
+                        <button>立即购买</button>
+                    </a>
+
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom">
+        <div class="w">
+            <div class="top">
+                <ul>
+                    <li>
+                        <a href="">
+                            <img th:src="@{/static/img/bottom1.png}" alt="">
+                            <span>大咖级讲师亲自授课</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="">
+                            <img th:src="@{/static/img/bottom.png}" alt="">
+                            <span>课程为学员成长持续赋能</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="">
+                            <img th:src="@{/static/img/bottom2.png}" alt="">
+                            <span>学员真是情况大公开</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="content">
+                <dl>
+                    <dt>关于尚硅谷</dt>
+                    <dd>教育理念</dd>
+                    <!-- <dd>名师团队</dd>
+                    <dd>学员心声</dd> -->
+                </dl>
+                <dl>
+                    <dt>资源下载</dt>
+                    <dd>视频下载</dd>
+                    <!-- <dd>资料下载</dd>
+                    <dd>工具下载</dd> -->
+                </dl>
+                <dl>
+                    <dt>加入我们</dt>
+                    <dd>招聘岗位</dd>
+                    <!-- <dd>岗位介绍</dd>
+                    <dd>招贤纳师</dd> -->
+                </dl>
+                <dl>
+                    <dt>联系我们</dt>
+                    <dd>http://www.atguigu.com
+                    <dd>
+                </dl>
+            </div>
+        </div>
+        <div class="down">
+            尚硅谷书城.Copyright ©2015
+        </div>
+    </div>
+
+
+</div>
+<script th:src="@{/static/script/swiper.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/script/jquery-1.7.2.js}"></script>
+<script>
+    var swiper = new Swiper('.swiper-container', {
+        autoplay: true,
+        pagination: {
+            el: '.swiper-pagination',
+            dynamicBullets: true
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev'
+        }
+    })
+
+    // 添加到购物车
+    $(function () {
+        $(".add-cart-btn").each(function () {
+            $(this).click(function () {
+
+                if (confirm("确认添加吗？")) {
+                    $(this).siblings(":submit").submit();
+                }
+            })
+        })
+
+        // 根据价格进行筛选
+        $("filter-select-btn").click(function () {
+            let priceBottom = $(this).siblings().eq(1).val();
+            let priceTop = $(this).siblings().eq(3).val();
+            let exp = new RegExp("^\\d+$");
+            if (exp.test(priceBottom)
+                && exp.test(priceTop)
+                && (priceBottom - 0) < (priceTop - 0)
+                && (priceBottom - 0) > 0) {
+
+
+                $(this).parent().parent().submit();
+            }
+        });
+
+    })
+
+
+
+</script>
+</body>
+</html>

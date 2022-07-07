@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    namespace : 名称空间
+-->
+<mapper namespace="book.mapper.UserMapper">
+
+    <insert id="insertOneByUser" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO bookdb.t_user (username, password, email, role)
+            VALUES (#{username}, #{password}, #{email}, #{role});
+    </insert>
+
+    <select id="selectByUsernameAndPassword" resultType="user">
+        SELECT id, username, password, email, role
+        FROM bookdb.t_user
+        WHERE
+              username = #{username}
+            AND
+              password = #{password};
+    </select>
+    <select id="selectById" resultType="book.pojo.User">
+        SELECT id, username, password, email, role
+        FROM bookdb.t_user
+        WHERE id = #{id}
+    </select>
+
+
+</mapper>

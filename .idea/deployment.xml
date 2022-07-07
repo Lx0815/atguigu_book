@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="tencent" remoteFilesAllowedToDisappearOnAutoupload="false">
+    <serverData>
+      <paths name="tencent">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/webapps/book" local="$PROJECT_DIR$/target/book-1.0-SNAPSHOT" web="/" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/src" />
+            <excludedPath local="true" path="$PROJECT_DIR$/MySQL_create_table_sql" />
+            <excludedPath local="true" path="$PROJECT_DIR$/.idea" />
+            <excludedPath local="true" path="$PROJECT_DIR$/pom.xml" />
+            <excludedPath local="true" path="$PROJECT_DIR$/README.md" />
+          </excludedPaths>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>

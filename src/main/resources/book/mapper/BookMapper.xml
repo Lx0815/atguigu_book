@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="book.mapper.BookMapper">
+
+    <resultMap id="bookMap" type="book">
+        <result property="bookCount" column="book_count"/>
+        <result property="bookName" column="book_name"/>
+        <result property="bookImg" column="book_img"/>
+        <result property="saleCount" column="sale_count"/>
+        <result property="bookStatus" column="book_status"/>
+    </resultMap>
+    <insert id="insertOne">
+        INSERT INTO bookdb.t_book (book_count, book_name, price, book_img, author, sale_count, book_status)
+                VALUES (#{bookCount}, #{bookName}, #{price}, #{bookImg}, #{author}, #{saleCount}, #{bookStatus})
+    </insert>
+
+    <update id="updateById">
+        UPDATE bookdb.t_book
+
+        <trim prefix="set " suffix=" " suffixOverrides=",">
+            <if test="bookCount != null and bookCount != ''">
+                book_count = #{bookCount} ,
+            </if>
+            <if test="bookName != null and bookName != ''">
+                book_name = #{bookName} ,
+            </if>
+            <if test="price != null">
+                price = #{price} ,
+            </if>
+            <if test="bookImg != null and bookImg != ''">
+                book_img = #{bookImg} ,
+            </if>
+            <if test="author != null and author != ''">
+                author = #{author} ,
+            </if>
+            <if test="saleCount != null">
+                sale_count = #{saleCount} ,
+            </if>
+            <if test="bookStatus != null">
+                book_status = #{bookStatus} ,
+            </if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+    <delete id="deleteById">
+        DELETE FROM bookdb.t_book
+        WHERE id = #{bookId}
+    </delete>
+
+    <select id="selectAll" resultMap="bookMap">
+        SELECT id, book_count, book_name, price, book_img, author, sale_count, book_status
+        FROM bookdb.t_book
+    </select>
+
+    <select id="selectById" resultMap="bookMap">
+        SELECT id, book_count, book_name, price, book_img, author, sale_count, book_status
+        FROM bookdb.t_book
+        WHERE id = #{id}
+    </select>
+    <select id="selectByLimit" resultMap="bookMap">
+        SELECT id, book_count, book_name, price, book_img, author, sale_count, book_status
+        FROM bookdb.t_book
+        WHERE book_status = 1
+        LIMIT #{pageStartRow}, #{pageSize}
+    </select>
+    <select id="selectAllCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM bookdb.t_book
+    </select>
+    <select id="selectPriceById" resultType="java.math.BigDecimal">
+        SELECT price
+        FROM bookdb.t_book
+        WHERE id = #{id}
+    </select>
+    <select id="selectRemainingStockByCartItemId" resultType="java.lang.Integer">
+        SELECT b.book_count - c.buy_count AS remaining_stock
+        FROM
+            bookdb.t_book b
+                join bookdb.t_cart_item c
+                     on b.id = c.book
+        where c.id = #{cartItemId}
+    </select>
+    <select id="selectByPriceLimit" resultMap="bookMap">
+        SELECT id, book_count, book_name, price, book_img, author, sale_count, book_status
+        FROM bookdb.t_book
+        WHERE
+              price > #{priceBottom}
+            AND
+              price &lt; #{priceTop}
+        LIMIT #{pageStartRow}, #{pageSize}
+    </select>
+</mapper>
